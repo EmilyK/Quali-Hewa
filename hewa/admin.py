@@ -1,22 +1,17 @@
 from django.contrib import admin
-from hewa.models import Analyser, Sensor, Station, Reading
-
-
-class ReadingInline(admin.TabularInline):
-	model = Reading
+from hewa.models import Analyser, Station
 
 class StationAdmin(admin.ModelAdmin):
-	inlines = (ReadingInline,)
-	list_display = ('station_name','lat','lon')
-	# filter_horizontal = ('analyser',)
+	list_display = ('station_name','lat','lon', 'analyser')
+	
 
 class AnalyserAdmin(admin.ModelAdmin):
-	list_display = ('analyser_id','registration_time')
+	list_display = ('analyser_id','sensor_type','sensor_reading', 'reading_time')
 
-class SensorAdmin(admin.ModelAdmin):
-	list_display = ('sensor_type','sensor_quantity')
+# class SensorAdmin(admin.ModelAdmin):
+# 	list_display = ('sensor_type','sensor_quantity')
 
 admin.site.register(Station, StationAdmin)
 admin.site.register(Analyser, AnalyserAdmin)
-admin.site.register(Sensor, SensorAdmin)
-# admin.site.register(Reading, ReadingInline)
+# admin.site.register(Sensor, SensorAdmin)
+
