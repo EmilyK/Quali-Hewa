@@ -13,6 +13,7 @@ sensor_choices = [
 	('A', 'All'),
 ]
 
+
 class Analyser(models.Model):
 	analyser_id = models.IntegerField(max_length = 100)
 	sensor_type = models.CharField(max_length=100, choices = sensor_choices)
@@ -22,13 +23,16 @@ class Analyser(models.Model):
 	def __unicode__(self):
 		return self.sensor_type
 
+
 class Station(models.Model):
-	station_name = models.CharField(max_length=200)
+	station_name = models.CharField(max_length=100, null=False) # Name of Station
+	# can a plane Decimal field work?
 	lat = models.FloatField(('Latitude'), blank=True, null=True)
 	lon = models.FloatField(('Longitude'), blank=True, null=True)
 	analyser = models.ForeignKey(Analyser)
 
 	def __unicode__(self):
+		#TODO -> station_name doesn't exist
 		return self.station_name
 
 

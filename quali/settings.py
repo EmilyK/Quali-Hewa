@@ -10,7 +10,7 @@ SETTINGS_DIR=os.path.join(PROJECT_PATH,'settings.py')
 PROJECT_PATH = os.path.join(SETTINGS_DIR, os.pardir)
 PROJECT_PATH = os.path.abspath(PROJECT_PATH)
 TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
-DATABASE_PATH = os.path.join(PROJECT_PATH, 'qh.db')
+# DATABASE_PATH = os.path.join(PROJECT_PATH, 'qh.db')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'w^q$-=%@bx)454te%upk6!0vn1$q^ank$e))3hl($*2uy9uo#s'
 
@@ -24,7 +24,7 @@ ALLOWED_HOSTS = ['*']
 # SITE_ID = 1
 
 INSTALLED_APPS = (
-    'djangocms_admin_style',
+    # 'djangocms_admin_style',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -62,8 +62,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': DATABASE_PATH,
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'qualihewa',
+        'PASSWORD': "",
+        'USER': 'root',
+        'PORT': '3306',
+        'HOST': '127.0.0.1' # 127.0.0.1
     }
 }
 
