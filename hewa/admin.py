@@ -1,17 +1,21 @@
 from django.contrib import admin
-from hewa.models import Analyser, Station
+from hewa.models import Analyser, Station, AirQualityReading
 
 class StationAdmin(admin.ModelAdmin):
 	list_display = ('station_name','lat','lon', 'analyser')
+
 	
 
 class AnalyserAdmin(admin.ModelAdmin):
-	list_display = ('analyser_id','sensor_type','sensor_reading', 'reading_time')
+	list_display = ('carbonmonoxide_sensor_present','nitrogen_sensor_present',
+	 'gas_sensor_present')
 
-# class SensorAdmin(admin.ModelAdmin):
-# 	list_display = ('sensor_type','sensor_quantity')
+class AirQualityReadingAdmin(admin.ModelAdmin):
+	list_display = ('carbonmonoxide_sensor_reading','nitrogen_sensor_reading',
+		'gas_sensor_reading')
+	
 
+   
 admin.site.register(Station, StationAdmin)
 admin.site.register(Analyser, AnalyserAdmin)
-# admin.site.register(Sensor, SensorAdmin)
-
+admin.site.register(AirQualityReading, AirQualityReadingAdmin)
