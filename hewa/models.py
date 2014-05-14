@@ -9,7 +9,7 @@ class AirQualityReading(models.Model):
     """
     carbonmonoxide_sensor_reading = models.DecimalField(max_digits=10, default=0.00, decimal_places=3)
     nitrogen_sensor_reading = models.DecimalField(max_digits=10, default=0.00, decimal_places=3)
-    gas_sensor_reading = models.DecimalField(max_digits=10, default=0.00, decimal_places=3)
+    lpg_gas_sensor_reading = models.DecimalField(max_digits=10, default=0.00, decimal_places=3)
     created_at = models.DateTimeField(auto_now=True, default=datetime.datetime.today())
 
     def __unicode__(self):
@@ -44,7 +44,7 @@ class Analyser(models.Model):
     """
     carbonmonoxide_sensor_present = models.BooleanField(default=False)
     nitrogen_sensor_present = models.BooleanField(default=False)
-    gas_sensor_present = models.BooleanField(default=False)
+    lpg_gas_sensor_present = models.BooleanField(default=False)
     readings = models.ManyToManyField(AirQualityReading)
 
     def __unicode__(self):

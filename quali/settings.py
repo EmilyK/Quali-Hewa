@@ -33,7 +33,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_extensions',
     # 'django.contrib.sites',
-    'south',
+    'south', #For managing changes to your database tables via data migrations.
     'hewa',
 )
 
