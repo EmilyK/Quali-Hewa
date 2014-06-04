@@ -8,12 +8,20 @@ class AirQualityReading(models.Model):
     different sensors.
     """
     carbonmonoxide_sensor_reading = models.DecimalField(max_digits=10, default=0.00, decimal_places=3)
-    nitrogen_sensor_reading = models.DecimalField(max_digits=10, default=0.00, decimal_places=3)
+    nitrogendioxide_sensor_reading = models.DecimalField(max_digits=10, default=0.00, decimal_places=3)
     lpg_gas_sensor_reading = models.DecimalField(max_digits=10, default=0.00, decimal_places=3)
-    created_at = models.DateTimeField(auto_now=True, default=datetime.datetime.today())
+    created_at = models.DateTimeField(
+        auto_now=True,
+        auto_now_add=True,
+        null=True, 
+        default=datetime.datetime.now())
 
     def __unicode__(self):
-        return self.created_at
+        return "{0}, {1}, {2}".format(
+            self.carbonmonoxide_sensor_reading,
+            self.nitrogendioxide_sensor_reading,
+            self.lpg_gas_sensor_reading
+        )#self.created_at #what you want to see when interacting with the database
 
 
 class Analyser(models.Model):    
@@ -43,9 +51,10 @@ class Analyser(models.Model):
     >>> Analyser.objects.filter(carbonmonoxide_sensor_present=False)
     """
     carbonmonoxide_sensor_present = models.BooleanField(default=False)
-    nitrogen_sensor_present = models.BooleanField(default=False)
+    nitrogendioxide_sensor_present = models.BooleanField(default=False)
     lpg_gas_sensor_present = models.BooleanField(default=False)
     readings = models.ManyToManyField(AirQualityReading)
+    registered_at = models.DateTimeField(auto_now=True, default=datetime.datetime.today())
 
     def __unicode__(self):
         if self.station_set.exists():

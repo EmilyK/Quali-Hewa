@@ -6,6 +6,11 @@ import os
 PROJECT_PATH = os.path.dirname(os.path.dirname(__file__))
 
 SETTINGS_DIR=os.path.join(PROJECT_PATH,'settings.py')
+STATICFILES_DIRS = (
+    os.path.join(
+        os.path.dirname(__file__),
+        'static',),
+    )
 
 PROJECT_PATH = os.path.join(SETTINGS_DIR, os.pardir)
 PROJECT_PATH = os.path.abspath(PROJECT_PATH)
@@ -33,8 +38,13 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_extensions',
     # 'django.contrib.sites',
-    'south', #For managing changes to your database tables via data migrations.
+
     'hewa',
+    'djgeojson', # see https://pypi.python.org/pypi/django-geojson
+    # the `djgeojson` returns GeoJSON
+    'django_tables2',
+    'tastypie',
+    'south', #For managing changes to your database tables via data migrations.
 )
 
 MIDDLEWARE_CLASSES = (
@@ -57,6 +67,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
+    
 )   
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases

@@ -1,0 +1,12 @@
+{% extends "hewa/base.html" %}
+{% load render_table from django_tables2 %}
+
+
+{% block container %}
+ <div id="map"></div>
+
+ <div class='map-container'>
+ {% render_table stations %}
+</div>
+
+{% endblock %}

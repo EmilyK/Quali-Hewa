@@ -1,0 +1,13 @@
+body{
+	background: url('../images/congruent_outline.png');
+}
+
+#map { height: 400px; }
+
+div.nav ul{
+	list-style: none;
+}
+
+.table-container{
+	margin-top: 2em;
+}

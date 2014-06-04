@@ -7,12 +7,12 @@ class StationAdmin(admin.ModelAdmin):
 	
 
 class AnalyserAdmin(admin.ModelAdmin):
-	list_display = ('carbonmonoxide_sensor_present','nitrogen_sensor_present',
-	 'lpg_gas_sensor_present')
+	list_display = ('carbonmonoxide_sensor_present','nitrogendioxide_sensor_present',
+	 'lpg_gas_sensor_present', 'registered_at')
 
 class AirQualityReadingAdmin(admin.ModelAdmin):
-	list_display = ('carbonmonoxide_sensor_reading','nitrogen_sensor_reading',
-		'lpg_gas_sensor_reading')
+	list_display = ('carbonmonoxide_sensor_reading','nitrogendioxide_sensor_reading',
+		'lpg_gas_sensor_reading', 'created_at')
 	
 
    

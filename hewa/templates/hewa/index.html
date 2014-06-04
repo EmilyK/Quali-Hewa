@@ -1,0 +1,56 @@
+{% extends "hewa/base.html" %}
+{% load render_table from django_tables2 %}
+
+
+{% block container %}
+ <div class='row'>
+ 	<div class='col-md-7'>
+ 		<div id="map"></div>
+ 	</div>
+ 	<div class='col-md-5'>
+ 		<div id='container'></div>
+ 	</div>
+</div>
+
+
+<div class='row'>
+	<div class='col-md-12'>
+	<h3>Readings</h3>
+	<table class='table'>
+		<thead>
+			<th>Station Name</th>
+			<th>Carbon monoxide reading</th>
+			<th>Nitrogen Dioxide reading</th>
+			<th>LPG gas reading</th>
+		</thead>
+		<tbody>
+
+			{% if readings %}
+				{% for station_name, co, no, lpg in readings %}
+				<tr>
+					<td>{{ station_name }} </td>
+					<td>{{ co }}</td>
+					<td>{{ no }}</td>
+					<td>{{ lpg }}</td>
+				</tr>
+				{% endfor %}
+			{% else %}
+			<td colspan=4>
+				<div class='panel panel-info' style='text-align: center;'>
+					<div class='panel-body'>There are no readings</div>
+				</div>
+			</td>
+			{% endif %}
+			<!-- loop through recs -->
+		</tbody>
+	</table>
+</div>
+</div>
+
+<div class='row'>
+	<div class='col-md-12'><a href='#' class='btn btn-lg btn-primary'>Export Data</a></div>
+</div>
+ 		{# render_table stations #}
+</div><!-- bootstrap row for next layer of app -->
+
+{% endblock %}
