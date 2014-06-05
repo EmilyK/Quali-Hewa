@@ -65,107 +65,50 @@ L.marker([.66, 30.275], {
 
 
 $(document).ready(function(){
-    
     $(function () {
-        var seriesContainer = [];
-
-        $.getJSON('api/v1/stations/1/',(function(data){
-                var analyserUrl = data.analyser;
-                $.getJSON(analyserUrl, function(data){
-                    // use `data` that is returned
-                    var allReadings = data.readings;
-                    var dataSet = [];
-                    $.each(allReadings, function(i, value){
-                        dataSet.push(value);
-                    })
-                    console.log(dataSet);
-                });
-            }));
+        $('#container').highcharts({
+            title: {
+                text: 'Monthly Average Readings',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'Raspberry pi readings',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                title: {
+                    text: 'Readings'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: 'units'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'Carbonmonoxide',
+                data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+            }, {
+                name: 'Nitrogendioxide',
+                data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+            }, {
+                name: 'Lpg gas',
+                data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+            }]
+        });
     });
-});
-                // $.ajax({
-                //     url: analyserUrl,
-                //     type: 'GET',
-                //     accepts: 'application/json',
-                //     dataType: 'json'
-                // }).done(function(data){
-                     
-                //     data.readings is an array with links to the Analyser's readings Resources
-                    
-                //     var allReadings = data.readings;
-                //     for (var i=0; i<allReadings.size; i++){
-
-                //     }
-                //     // console.log(data.readings);//
-                // });
-//                 seriesContainer.push({name: 'Carbonmonoxide', data: [parseFloat(data.carbonmonoxide_sensor_reading), 
-//                     10, 
-//                     34, 
-//                     56,
-//                     23,
-//                     12,
-//                     6]});
-//                 seriesContainer.push({name: 'Nitrogendioxide', data: [parseFloat(data.nitrogendioxide_sensor_reading), 
-//                     2, 
-//                     15, 
-//                     6,
-//                     13,
-//                     12,
-//                     5]});
-//                 seriesContainer.push({name: 'LPG', data: [parseFloat(data.lpg_gas_sensor_reading), 
-//                     1.0, 9.5, 14.5, 9.2, 5.5, 15.2]});
-
-
-//                 $('#container').highcharts({
-//                     title: {
-//                         text: 'Weekly readings in Ntinda',
-//                         x: -20 //center
-//                     },
-//                     subtitle: {
-//                         text: 'Source: Analyser in Ntinda',
-//                         x: -20
-//                     },
-//                     xAxis: {
-//                         categories: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat',
-//                             'Sun']
-//                     },
-//                     yAxis: {
-//                         title: {
-//                             text: 'Readings'
-//                         },
-//                         plotLines: [{
-//                             value: 0,
-//                             width: 1,
-//                             color: '#808080'
-//                         }]
-//                     },
-//                     tooltip: {
-//                         valueSuffix: 'mm'
-//                     },
-//                     legend: {
-//                         layout: 'vertical',
-//                         align: 'right',
-//                         verticalAlign: 'middle',
-//                         borderWidth: 0
-//                     },
-//                     series: seriesContainer
-//                     //  [{
-//                     //     name: 'Carbonmonoxide',
-//                     //     data: [7.0, 6.9, 9.5, 14.5, 9.2, 5.5, 15.2]
-//                     // }, {
-//                     //     name: 'Nitrogenmonoxide',
-//                     //     data: [-0.2, 0.8, 5.7, 11.3, 7.0, 12.0, 0.8]
-//                     // }, {
-//                     //     name: 'LPG gas',
-//                     //     data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6]
-                    
-//                     // }]
-//                 });
-
-//             //method for creating the chart
-
-//     });
     
-
-
-// });
+});
