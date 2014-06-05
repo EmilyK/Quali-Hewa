@@ -1,6 +1,5 @@
 var map = L.mapbox.map('map', 'ekar45.ib0g1o5d').setView([0.413199, 32.6892796], 7);
 
-
 var myLayer = L.mapbox.featureLayer().addTo(map);
 
 var geojson = {
