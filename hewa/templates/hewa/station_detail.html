@@ -1,0 +1,23 @@
+{% extends "hewa/base.html" %}
+{% load selectable_tags %}
+{% block container %}
+<h1 class='page-header'>{{ object }}</h1>
+<div class='panel'>
+{# readings #}
+<table class='table'>
+	<thead><th>Carnonmonoxide</th>
+		<th>Nitrongendioxide</th>
+		<th>LPG Gas</th>
+		<tbody>
+	{% for reading in readings %}
+	<tr>
+	<td>{{ reading.carbonmonoxide_sensor_reading }}</td>
+	<td> {{ reading.nitrogendioxide_sensor_reading}}</td>
+	<td>{{ reading.lpg_gas_sensor_reading }}</td>
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+</div>
+{% endblock %}
