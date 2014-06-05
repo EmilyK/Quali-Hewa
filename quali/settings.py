@@ -37,13 +37,16 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    # 'django.contrib.sites',
+    # 'contrib.staticfiles',
+    'django.contrib.sites',
 
     'hewa',
-    'djgeojson', # see https://pypi.python.org/pypi/django-geojson
+    
     # the `djgeojson` returns GeoJSON
     'django_tables2',
     'tastypie',
+    'selectable',
+    'selectable_select2',
     'south', #For managing changes to your database tables via data migrations.
 )
 
