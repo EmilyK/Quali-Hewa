@@ -12,12 +12,10 @@ v1_api.register(AnalyserResource())
 v1_api.register(AirQualityReadingResource())
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'quali.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-    url(r'^data.geojson$', views.station_json, name='data'), # named url `data`
-    url(r'^$',views.index, name = 'index'),
+ 	url(r'^$',views.index, name = 'index'),
     url(r'^stations/$',views.stations, name = 'stations'),
+    url(r'^stations/(?P<pk>\d)/$', views.StationDetailView.as_view(), name='station-detail'),
     url(r'^admin/', include(admin.site.urls)),
  	(r'^api/', include(v1_api.urls)),
+ 	(r'^selectable/', include('selectable.urls')),
   )
