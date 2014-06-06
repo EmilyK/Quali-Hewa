@@ -18,4 +18,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
  	(r'^api/', include(v1_api.urls)),
  	(r'^selectable/', include('selectable.urls')),
+ 	url(r'^excel/', views.export, name = 'generate-excel'),
   )
