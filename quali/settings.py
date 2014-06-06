@@ -26,7 +26,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-# SITE_ID = 1
+SITE_ID = 1
 
 INSTALLED_APPS = (
     # 'djangocms_admin_style',
@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_extensions',
     # 'contrib.staticfiles',
-    'django.contrib.sites',
+    # 'django.contrib.sites',
 
     'hewa',
     
