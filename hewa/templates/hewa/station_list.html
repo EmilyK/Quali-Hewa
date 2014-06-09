@@ -1,0 +1,15 @@
+{% extends "hewa/base.html" %}
+{% load staticfiles %}
+
+{% block container %}
+ <div class='row'>
+ 	<div class='col-md-12'>
+ 		<div id="map"></div>
+ 	</div>
+ </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/qualihewa-map.js' %}"></script>
+{% endblock %}
