@@ -62,11 +62,16 @@ def chart_json(request):
 
     dates = sorted(dates) # sort the days in ascending order
 
-    co_reading = []
-    no_reading = []
-    lpg_reading = []
+
+    co_reading_total = []
+    no_reading_total = []
+    lpg_reading_total = []
 
     for analyser in analysers:
+
+        co_reading = []
+        no_reading = []
+        lpg_reading = []
         if analyser.readings.exists():
 
             for date in dates:
@@ -82,26 +87,24 @@ def chart_json(request):
                 co_reading.append(co)
                 no_reading.append(no)
                 lpg_reading.append(lpg)
+        co_reading_total.append(co_reading)
+        no_reading_total.append(no_reading)
+        lpg_reading_total.append(lpg_reading)
 
 
-    data_list.append((
-                            {'name': 'Carbonmonoxide', 'data': co_reading},
-                            {'name': 'Nitrogendioxide', 'data': no_reading},
-                            {'name': 'LPG gas', 'data': lpg_reading}
-                        ))
+    corrected_co_reading = [sum(a) for a in zip(*co_reading_total)]
+    corrected_no_reading = [sum(a) for a in zip(*no_reading_total)]
+    corrected_lpg_reading = [sum(a) for a in zip(*lpg_reading_total)]
 
-    data_to_dump = {'payload': data_list }
+    data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
+                            {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
+                            {'name': 'LPG gas', 'data': corrected_lpg_reading}]
 
-     # [
-     #                    {'name': 'Carbonmonoxide', 
-     #                    'data': [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2]
-     #                    },
-     #                    {'name': 'Nitrogendioxide', 
-     #                    'data': [-20, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8]
-     #                    },
-     #                    {'name': 'LPG gas', 'data': [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0]}
-     #                    ]}
- 
+    days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    dates_clean = [days[d_start.weekday()] for d_start, d_end in dates]
+
+    data_to_dump = {'payload': data_list, 'dates': dates_clean }
+
     data = json.dumps(data_to_dump)
     return HttpResponse(data, mimetype='application/json')
 

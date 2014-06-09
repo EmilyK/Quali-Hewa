@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $.getJSON('/chart-data', function(data){
-        // console.log(data['payload']);
+       
         $('#container').highcharts({
             title: {
                 text: 'Monthly Average Readings',
@@ -11,7 +11,7 @@ $(document).ready(function(){
                 x: -20
             },
             xAxis: {
-                categories: ['Mon','Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
+                categories: data['dates']//['Sun', 'Sat', 'Fri', 'Thur', 'Wed', 'Tue', 'Mon']
             },
             yAxis: {
                 title: {
