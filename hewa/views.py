@@ -10,6 +10,7 @@ from hewa.tables import StationTable
 from hewa.models import Station, Analyser, AirQualityReading
 from .forms import StationForm
 from django.views.generic.detail import DetailView
+from django.views.generic import ListView
 from utilities import generate_excel
 
 
@@ -59,6 +60,24 @@ class StationDetailView(DetailView):
         return context
 
 
+def station_list(request):
+    form = StationForm()
+
+    if request.method == 'POST':
+        form = StationForm(request.POST)
+        station_name = form.data['autocomplete']
+        if station_name:
+            station = Station.objects.filter(station_name__icontains=station_name)
+            if station.exists():
+                station = station[0]
+                return redirect('station-detail', pk=station.pk)
+            else:
+                return redirect('stations')
+    return render_to_response('hewa/station_list.html', 
+        {'form': form, }, 
+        RequestContext(request))
+
+
 def station_json(request):
 	# http://stackoverflow.com/questions/20890955/mapbox-show-tooltips-by-default-without-having-to-click-a-marker
 	return
@@ -72,7 +91,6 @@ def export(request):
     response = HttpResponse(mimetype='application/ms-excel')
     response['Content-Disposition'] = "attachment; filename=export.xls"
 
-    # book = generate_excel()
     w = xlwt.Workbook()
     ws1 = w.add_sheet('Reading')
 
