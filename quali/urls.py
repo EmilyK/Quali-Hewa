@@ -13,7 +13,7 @@ v1_api.register(AirQualityReadingResource())
 
 urlpatterns = patterns('',
  	url(r'^$',views.index, name = 'index'),
-    url(r'^stations/$',views.stations, name = 'stations'),
+    url(r'^stations/$',views.station_list, name = 'stations'),
     url(r'^stations/(?P<pk>\d)/$', views.StationDetailView.as_view(), name='station-detail'),
     url(r'^admin/', include(admin.site.urls)),
  	(r'^api/', include(v1_api.urls)),
