@@ -3,7 +3,7 @@ $(document).ready(function(){
        
         $('#container').highcharts({
             title: {
-                text: 'Monthly Average Readings',
+                text: 'Weekly total Readings',
                 x: -20 //center
             },
             subtitle: {
