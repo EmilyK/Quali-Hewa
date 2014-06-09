@@ -1,6 +1,8 @@
 from django.shortcuts import render, RequestContext
+from django.utils import simplejson as json
 import xlwt
 import datetime
+from dateutil.relativedelta import relativedelta
 
 # Create your views here.
 from django.http import HttpResponse
@@ -36,14 +38,107 @@ def index(request):
         readings = []
         for analyser in analysers:
             if analyser.readings.exists():
-                latest_reading = analyser.readings.latest('created_at')
-                readings.append((analyser.station_set.latest('station_name'),
-                    latest_reading.carbonmonoxide_sensor_reading,
-                    latest_reading.nitrogendioxide_sensor_reading,
-                    latest_reading.lpg_gas_sensor_reading,
-                    latest_reading.created_at))
+                latest_reading = analyser.readings.all() #.latest('created_at')
+                for reading in latest_reading:
+                    readings.append((analyser.station_set.latest('station_name'),
+                        reading.carbonmonoxide_sensor_reading,
+                        reading.nitrogendioxide_sensor_reading,
+                        reading.lpg_gas_sensor_reading,
+                        reading.created_at))
         return render_to_response('hewa/index.html', {'form': form, 'stations': Station.objects.all(), 
             'readings': readings}, RequestContext(request))
+
+def chart_json(request):
+    analysers = Analyser.objects.exclude(station=None)
+    data_list = []
+    dates = []
+    now = datetime.datetime.now()
+
+    for i in range(7):
+        dates.append(
+            (now+relativedelta(days=-i, hour=0,minute=0, second=0, microsecond=0),#beginning of the day
+            now+relativedelta(days=-i, hour=23,minute=59, second=0, microsecond=0),#end of the day
+            ))
+
+    dates = sorted(dates) # sort the days in ascending order
+
+    co_reading = []
+    no_reading = []
+    lpg_reading = []
+
+    for analyser in analysers:
+        if analyser.readings.exists():
+
+            for date in dates:
+                readings = analyser.readings.filter(created_at__range=date)
+                co = 0
+                no = 0
+                lpg = 0
+                for reading in readings:
+                    co += reading.carbonmonoxide_sensor_reading
+                    no += reading.nitrogendioxide_sensor_reading
+                    lpg += reading.lpg_gas_sensor_reading
+
+                co_reading.append(co)
+                no_reading.append(no)
+                lpg_reading.append(lpg)
+
+
+    data_list.append((
+                            {'name': 'Carbonmonoxide', 'data': co_reading},
+                            {'name': 'Nitrogendioxide', 'data': no_reading},
+                            {'name': 'LPG gas', 'data': lpg_reading}
+                        ))
+
+    data_to_dump = {'payload': data_list }
+
+     # [
+     #                    {'name': 'Carbonmonoxide', 
+     #                    'data': [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2]
+     #                    },
+     #                    {'name': 'Nitrogendioxide', 
+     #                    'data': [-20, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8]
+     #                    },
+     #                    {'name': 'LPG gas', 'data': [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0]}
+     #                    ]}
+ 
+    data = json.dumps(data_to_dump)
+    return HttpResponse(data, mimetype='application/json')
+
+
+
+def chart_json_w(request):
+    data_to_dump = {'key': 'value'}
+    data = json.dumps(data_to_dump)
+    return HttpResponse(data, mimetype='application/json')
+
+
+
+
+def chart_json_m(request):
+    data_to_dump = {'key': 'value'}
+    data = json.dumps(data_to_dump)
+    return HttpResponse(data, mimetype='application/json')
+
+
+def chart_json_station(request, pk):
+    data_to_dump = {'key': 'value'}
+    data = json.dumps(data_to_dump)
+    return HttpResponse(data, mimetype='application/json')
+
+
+
+def chart_json_station_w(request, pk):
+    data_to_dump = {'key': 'value'}
+    data = json.dumps(data_to_dump)
+    return HttpResponse(data, mimetype='application/json')
+
+
+def chart_json_station_m(request, pk):
+    data_to_dump = {'key': 'value'}
+    data = json.dumps(data_to_dump)
+    return HttpResponse(data, mimetype='application/json')
+
 
 
 class StationDetailView(DetailView):
