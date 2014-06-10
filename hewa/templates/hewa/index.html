@@ -6,9 +6,22 @@
 
 {% block container %}
  <div class='row'>
- 	<div class='col-md-12' style='margin-top: 10px;'>
+ 	<div class='col-md-10' style='margin-top: 10px;'>
  		<div id='container'></div>
  	</div> 	
+
+	<div class='col-md-2'>
+		<span class='label label-danger'>Please select the range</span><br/>
+		<hr>
+		<form role='form' class='form'>
+			<div class='input-group'>
+				<select id='selectBox' class='form-control'>
+					<option value= 'weekly' selected='selected'>Weekly</option>
+					<option value='monthly'>Monthly</option>
+				</select>
+			</div>
+		</form>
+	</div>
 </div>
 
 
@@ -43,7 +56,7 @@
 			<!-- loop through recs -->
 		</tbody>
 	</table>
-</div>
+	</div>
 </div>
 
 <div class='row'>
