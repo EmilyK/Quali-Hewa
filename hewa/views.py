@@ -110,19 +110,64 @@ def chart_json(request):
 
 
 
-def chart_json_w(request):
-    data_to_dump = {'key': 'value'}
+def chart_json_monthly(request):
+    analysers = Analyser.objects.exclude(station=None)
+    data_list = []
+    dates = []
+    now = datetime.datetime.now()
+
+    for i in range(12):
+        dates.append(
+            (now+relativedelta(months=-i, days=0, hours=0),#beginning of the month
+            now+relativedelta(months=-i, days=30, hours=24),#end of the month
+            ))
+
+    dates = sorted(dates) # sort the months in ascending order
+
+
+    co_reading_total = []
+    no_reading_total = []
+    lpg_reading_total = []
+
+    for analyser in analysers:
+
+        co_reading = []
+        no_reading = []
+        lpg_reading = []
+        if analyser.readings.exists():
+
+            for date in dates:
+                readings = analyser.readings.filter(created_at__range=date)
+                co = 0
+                no = 0
+                lpg = 0
+                for reading in readings:
+                    co += reading.carbonmonoxide_sensor_reading
+                    no += reading.nitrogendioxide_sensor_reading
+                    lpg += reading.lpg_gas_sensor_reading
+
+                co_reading.append(co)
+                no_reading.append(no)
+                lpg_reading.append(lpg)
+        co_reading_total.append(co_reading)
+        no_reading_total.append(no_reading)
+        lpg_reading_total.append(lpg_reading)
+
+
+    corrected_co_reading = [sum(a) for a in zip(*co_reading_total)]
+    corrected_no_reading = [sum(a) for a in zip(*no_reading_total)]
+    corrected_lpg_reading = [sum(a) for a in zip(*lpg_reading_total)]
+
+    data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
+                            {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
+                            {'name': 'LPG gas', 'data': corrected_lpg_reading}]
+
+    months = ['Jan', 'feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    months_clean = [months[d_start.month-1] for d_start, d_end in dates]
+    data_to_dump = {'payload': data_list, 'dates': months_clean}
     data = json.dumps(data_to_dump)
     return HttpResponse(data, mimetype='application/json')
-
-
-
-
-def chart_json_m(request):
-    data_to_dump = {'key': 'value'}
-    data = json.dumps(data_to_dump)
-    return HttpResponse(data, mimetype='application/json')
-
+   
 
 def chart_json_station(request, pk):
     data_to_dump = {'key': 'value'}
@@ -141,7 +186,6 @@ def chart_json_station_m(request, pk):
     data_to_dump = {'key': 'value'}
     data = json.dumps(data_to_dump)
     return HttpResponse(data, mimetype='application/json')
-
 
 
 class StationDetailView(DetailView):
@@ -180,10 +224,12 @@ def station_json(request):
 	# http://stackoverflow.com/questions/20890955/mapbox-show-tooltips-by-default-without-having-to-click-a-marker
 	return
 
+
 def stations(request):
     table = StationTable(Station.objects.all())
     RequestConfig(request, paginate={"per_page": 25}).configure(table)#Pulls values from request.GET and updates the table accordingly
     return render(request, "hewa/stations.html", {"stations": Station.objects.all()})
+
 
 def export(request):
     response = HttpResponse(mimetype='application/ms-excel')
