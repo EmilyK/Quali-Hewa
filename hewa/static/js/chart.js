@@ -1,15 +1,6 @@
-// function changeFunc(){
-//     console.log('here');
-//         var selectBox = $('#selectBox')[0];
-//         var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-//         console.log(selectedValue)
-//     }
-
-
 function generateChart(url, title){
 
     $.getJSON(url, function(data){
-        // $('#container').hide();
         $('#container').highcharts({
             title: {
                 text: title,
@@ -43,7 +34,6 @@ function generateChart(url, title){
             },
             series: data['payload']
         });
-        // $('#container').slideDown();
     });
 
 }
