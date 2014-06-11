@@ -92,9 +92,9 @@ def chart_json(request):
         lpg_reading_total.append(lpg_reading)
 
 
-    corrected_co_reading = [sum(a) for a in zip(*co_reading_total)]
-    corrected_no_reading = [sum(a) for a in zip(*no_reading_total)]
-    corrected_lpg_reading = [sum(a) for a in zip(*lpg_reading_total)]
+    corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
+    corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
+    corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
 
     data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
                             {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
@@ -154,9 +154,9 @@ def chart_json_monthly(request):
         lpg_reading_total.append(lpg_reading)
 
 
-    corrected_co_reading = [sum(a) for a in zip(*co_reading_total)]
-    corrected_no_reading = [sum(a) for a in zip(*no_reading_total)]
-    corrected_lpg_reading = [sum(a) for a in zip(*lpg_reading_total)]
+    corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
+    corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
+    corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
 
     data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
                             {'name': 'Nitrogendioxide', 'data': corrected_no_reading},

@@ -8,7 +8,7 @@ function generateChart(url, title){
                 x: -20 //center
             },
             subtitle: {
-                text: 'Raspberry pi readings',
+                text: 'QualiHewa Analyser Readings',
                 x: -20
             },
             xAxis: {
@@ -16,7 +16,7 @@ function generateChart(url, title){
             },
             yAxis: {
                 title: {
-                    text: 'Readings'
+                    text: 'Readings(parts per million)'
                 },
                 plotLines: [{
                     value: 0,
@@ -25,7 +25,7 @@ function generateChart(url, title){
                 }]
             },
             tooltip: {
-                valueSuffix: 'units'
+                valueSuffix: 'ppm'
             },
             legend: {
                 layout: 'vertical',
@@ -48,9 +48,9 @@ $(function(){
         var selectedBox = $('#selectBox')[0];
         var selectedValue = selectBox.options[selectBox.selectedIndex].value;
         if (selectedValue === 'monthly'){
-            generateChart('/chart-data/monthly', 'Monthly Total readings');
+            generateChart('/chart-data/monthly', 'Monthly Average readings from all stations');
         }else{
-            generateChart('/chart-data', 'Weekly Total readings');
+            generateChart('/chart-data', 'Weekly Average readings from all stations');
         }
     })
 });
@@ -58,5 +58,5 @@ $(function(){
 
 $(document).ready(function(){
     /* this is the default */
-    generateChart('/chart-data', 'Weekly Total readings');
+    generateChart('/chart-data', 'Weekly Average readings for all stations');
 });
