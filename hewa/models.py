@@ -68,14 +68,32 @@ class Analyser(models.Model):
 # Association
 # An analyser has_many Readings
 
-
 class Station(models.Model):
-	station_name = models.CharField(max_length=100, null=False) # Name of Station
-	# can a plane Decimal field work?
-	lat = models.FloatField(('Latitude'), blank=True, null=True)
-	lon = models.FloatField(('Longitude'), blank=True, null=True)
-	analyser = models.ForeignKey(Analyser)
+    station_name = models.CharField(max_length=100, null=False)
+    lat = models.FloatField(('Latitude'), blank=True, null=True)
+    lon = models.FloatField(('Longitude'), blank=True, null=True)
+    analyser = models.ForeignKey(Analyser)
 
-	def __unicode__(self):
-		#TODO -> station_name doesn't exist
-		return self.station_name
+    def __unicode__(self):
+        return self.station_name
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('station-detail', args=[str(self.id)])
+
+# class Station(models.Model):
+# 	station_name = models.CharField(max_length=100, null=False) # Name of Station
+# 	# can a plane Decimal field work?
+# 	lat = models.FloatField(('Latitude'), blank=True, null=True)
+# 	lon = models.FloatField(('Longitude'), blank=True, null=True)
+# 	analyser = models.ForeignKey(Analyser)
+
+# 	def __unicode__(self):
+# 		#TODO -> station_name doesn't exist
+# 		return self.station_name
+
+    #def get_absolute_url(self):
+        #pass
+    
+
+    

@@ -15,20 +15,23 @@
     <!-- Bootstrap core CSS -->
 
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+{% block top_js %}
+{% endblock %}
+    </script>
      <link href="{% static 'css/jquery-ui-1.10.4.min.css' %}" rel="stylesheet" media="screen">
      <link href="{% static 'css/jquery-ui-1.10.4.custom.min.css' %}" rel="stylesheet" media="screen">
      <link href="{{ STATIC_URL }}selectable/css/dj.selectable.css" type="text/css" media="all" rel="stylesheet">
 
     <link href="{% static 'css/qualihewa.css' %}" rel="stylesheet" media="screen">
   <link rel="stylesheet" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
-  <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.css' rel='stylesheet' />
-  
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    {% block extra_css %}
+    {% endblock %}
 
 </head>
 <body><!-- 
@@ -78,7 +81,6 @@
 <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script>$.fn.bootstrapBtn = $.fn.button.noConflict();</script><!--To avoid conflicts-->
-<script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js'></script>
 <script src="{% static 'js/jquery-ui-1.10.4.min.js' %}"></script>
 <script src="{% static 'js/highcharts.js' %}"></script>
 <script src="{% static 'js/modules/exporting.js' %}"></script>
@@ -87,8 +89,6 @@
 <script type="text/javascript" src="{{ STATIC_URL }}selectable/js/jquery.dj.selectable.js"></script>
 {% block extra_js %}
 {% endblock %}
-
-
 
 </body>
 </html>

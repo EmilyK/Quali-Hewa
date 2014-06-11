@@ -26,4 +26,6 @@ urlpatterns = patterns('',
  	(r'^api/', include(v1_api.urls)),
  	(r'^selectable/', include('selectable.urls')),
  	url(r'^excel/', views.export, name = 'generate-excel'),
+    url(r'^map-geojson/stations/(?P<pk>\d)/$', views.map_geojson_station, name = 'generate-map'),
+    url(r'^map-geojson/stations/$', views.map_geojson_all_stations, name = 'generate-map-all-stations'),
   )

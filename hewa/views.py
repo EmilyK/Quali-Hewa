@@ -49,7 +49,7 @@ def index(request):
             'readings': readings}, RequestContext(request))
 
 def chart_json(request):
-    analysers = Analyser.objects.exclude(station=None)
+    analysers = [analyser for analyser in Analyser.objects.exclude(station=None) if analyser.readings.exists()]
     data_list = []
     dates = []
     now = datetime.datetime.now()
@@ -111,7 +111,7 @@ def chart_json(request):
 
 
 def chart_json_monthly(request):
-    analysers = Analyser.objects.exclude(station=None)
+    analysers = [analyser for analyser in Analyser.objects.exclude(station=None) if analyser.readings.exists()]
     data_list = []
     dates = []
     now = datetime.datetime.now()
@@ -176,6 +176,53 @@ def chart_json_station(request, pk):
 
 
 
+def map_geojson_all_stations(request):
+    stations = Station.objects.all()
+    data_to_dump = []
+
+    for station in stations:
+        data_to_dump.append(
+            {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [ station.lat, station.lon]
+            },
+            "properties": {
+                "title": station.station_name,
+                "description": station.station_name,
+                "url": station.get_absolute_url()
+            }
+            })
+
+    data = json.dumps(data_to_dump)
+    return HttpResponse(data, mimetype='application/json')
+
+
+def map_geojson_station(request, pk):
+    stations = Station.objects.filter(pk=pk)
+    data_to_dump = []
+    
+    for station in stations:
+        data_to_dump.append(
+            {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [ station.lat, station.lon]
+            },
+            "properties": {
+                "title": station.station_name,
+                "description": station.station_name,
+                "url": station.get_absolute_url()
+            }
+            })
+
+    data = json.dumps(data_to_dump)
+    
+    return HttpResponse(data, mimetype='application/json')
+
+
 def chart_json_station_w(request, pk):
     data_to_dump = {'key': 'value'}
     data = json.dumps(data_to_dump)
@@ -223,12 +270,6 @@ def station_list(request):
 def station_json(request):
 	# http://stackoverflow.com/questions/20890955/mapbox-show-tooltips-by-default-without-having-to-click-a-marker
 	return
-
-
-def stations(request):
-    table = StationTable(Station.objects.all())
-    RequestConfig(request, paginate={"per_page": 25}).configure(table)#Pulls values from request.GET and updates the table accordingly
-    return render(request, "hewa/stations.html", {"stations": Station.objects.all()})
 
 
 def export(request):

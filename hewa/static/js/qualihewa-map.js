@@ -1,63 +1,54 @@
-var map = L.mapbox.map('map', 'ekar45.ib0g1o5d').setView([0.413199, 32.6892796], 7);
+var kampala = new google.maps.LatLng(0.3136110,32.5811110);
+var marker;
+var map;
 
-var myLayer = L.mapbox.featureLayer().addTo(map);/*provides a way to integrate GeoJSON from mmapbox and elsewhere*/
+function initialize() {
+  var mapOptions = {
+    zoom: 7,
+    center: kampala
+  };
 
-var geojson = {
-    type: 'FeatureCollection',
-    features: [{
-        type: 'Feature',
-        properties: {
-            title: 'Fort Portal',
-            'marker-color': '#f86767',
-            'marker-size': 'large',
-            'marker-symbol': 'star',
-            url: 'http://en.wikipedia.org/wiki/fortportal'
-        },
-        geometry: {
-            type: 'Point',
-            coordinates: [.66, 30.275]
-         }},
-        {
-        type: 'Feature',
-        properties: {
-            title: 'Kampala',
-            'marker-color': '#7ec9b1',
-            'marker-size': 'large',
-            'marker-symbol': 'star',
-            url: 'http://en.wikipedia.org/wiki/Kampala'
-        },
-        geometry: {
-            type: 'Point',
-            coordinates: [0.413199, 32.6892796]
-        }
-    }]
-};
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+          mapOptions);
 
-L.marker([0.413199, 32.6892796], {
-    icon: L.mapbox.marker.icon({
-        'marker-size': 'large',
-        'marker-symbol': 'bus',
-        'marker-color': '#fa0'
-    })
-}).addTo(map);
+	$.getJSON('/map-geojson/stations', function(data){
+		// var latLng = new google.maps.LatLng(data)
+		$.each(data, function(key, value){
+			var coord = value.geometry.coordinates;
+			var latLng = new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1]));
 
+			var content = '<div id="content">'+
+				'<h2>' + value.properties.title + '</h2>'+
+				'<p>' + "<a href='"+value.properties.url +"'>Readings</a>" + '</p>'+
+				'</div>'
+			var infowindow = new google.maps.InfoWindow({
+				content: content
+			})
+			//create a marker
+			var marker = new google.maps.Marker({
+				position: latLng,
+				map: map,
+				title: value.properties.title
+			});
+			google.maps.event.addListener(marker, 'click', function(){
+				infowindow.open(map, marker);
+			});
+		});
+	});
 
-L.marker([.66, 30.275], {
-    icon: L.mapbox.marker.icon({
-        'marker-size': 'large',
-        'marker-symbol': 'bus',
-        'marker-color': '#fa0'
-    })
-}).addTo(map);
+	var infowindow = new google.maps.InfoWindow({
+		content: 'Welcome to QualiHewa'
+	})
+	marker = new google.maps.Marker({
+		position: kampala,
+		map: map,
+		title: 'Kampala'
+	});
+	google.maps.event.addListener(marker, 'click', function(){
+		infowindow.open(map, marker);
+	});
 
 
-/* fetch geojson from django app
-*/
-// $.getJSON("{% url 'data' %}")
-// myLayer.setGeoJSON(geojson)
-// myLayer.on('mouseover', function(e) {
-//     e.layer.openPopup();
-// });
-// myLayer.on('mouseout', function(e) {
-//     e.layer.closePopup();
-// });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
