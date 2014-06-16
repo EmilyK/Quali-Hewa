@@ -19,9 +19,9 @@ function generateChart(url, title, tooltip){
                     text: 'Readings(parts per million)'
                 },
                 plotLines: [{
-                color: '#FF0000',
+                color: '#FFFF00',
                 width: 2,
-                value: 6 
+                value: 30 
                 }]
             },
             tooltip: {
