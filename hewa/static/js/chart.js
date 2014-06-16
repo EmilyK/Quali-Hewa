@@ -1,5 +1,5 @@
 /* function to generate chart */
-function generateChart(url, title){
+function generateChart(url, title, tooltip){
 
     $.getJSON(url, function(data){
         $('#container').highcharts({
@@ -22,6 +22,11 @@ function generateChart(url, title){
                     value: 0,
                     width: 1,
                     color: '#808080'
+                }],
+                plotLines: [{
+                color: '#FF0000',
+                width: 2,
+                value: 6 
                 }]
             },
             tooltip: {
@@ -49,6 +54,9 @@ $(function(){
         var selectedValue = selectBox.options[selectBox.selectedIndex].value;
         if (selectedValue === 'monthly'){
             generateChart('/chart-data/monthly', 'Monthly Average readings from all stations');
+        }
+        if (selectedValue === 'daily'){
+            generateChart('/chart-data/daily', 'Daily Average readings from all stations');
         }else{
             generateChart('/chart-data', 'Weekly Average readings from all stations');
         }
