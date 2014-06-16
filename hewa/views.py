@@ -13,7 +13,6 @@ from hewa.models import Station, Analyser, AirQualityReading
 from .forms import StationForm
 from django.views.generic.detail import DetailView
 from django.views.generic import ListView
-from utilities import generate_excel
 
 
 def index(request):
