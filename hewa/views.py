@@ -1,4 +1,4 @@
-from django.shortcuts import render, RequestContext
+from django.shortcuts import render, get_object_or_404, RequestContext
 from django.utils import simplejson as json
 import xlwt
 import datetime
@@ -105,6 +105,74 @@ def chart_json(request):
 
     data_to_dump = {'payload': data_list, 'dates': dates_clean }
 
+    data = json.dumps(data_to_dump)
+    return HttpResponse(data, mimetype='application/json')
+
+
+def sanitize_time(time_str):
+    if len(time_str) == 3:
+        return "0{0}".format(time_str)
+    else:
+        return time_str
+
+
+def chart_json_daily(request):
+    analysers = [analyser for analyser in Analyser.objects.exclude(station=None) if analyser.readings.exists()]
+    data_list = []
+    dates = []
+    now = datetime.datetime.now()
+
+    new_now = datetime.datetime(now.year, now.month, now.day, now.hour)
+
+    for i in range(1, 24):
+        dates.append(
+            (new_now + relativedelta(hours=-i, minute=0, second=0, microsecond=0),#beginning of the day
+            new_now + relativedelta(hours=-i, minute=59, second=0, microsecond=0),#end of the day
+            ))
+
+    dates.reverse() # sort the months in ascending order
+
+
+    co_reading_total = []
+    no_reading_total = []
+    lpg_reading_total = []
+
+    for analyser in analysers:
+
+        co_reading = []
+        no_reading = []
+        lpg_reading = []
+        if analyser.readings.exists():
+
+            for date in dates:
+                readings = analyser.readings.filter(created_at__range=date)
+                co = 0
+                no = 0
+                lpg = 0
+                for reading in readings:
+                    co += reading.carbonmonoxide_sensor_reading
+                    no += reading.nitrogendioxide_sensor_reading
+                    lpg += reading.lpg_gas_sensor_reading
+
+                co_reading.append(co)
+                no_reading.append(no)
+                lpg_reading.append(lpg)
+        co_reading_total.append(co_reading)
+        no_reading_total.append(no_reading)
+        lpg_reading_total.append(lpg_reading)
+
+
+    corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
+    corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
+    corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
+
+    data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
+                            {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
+                            {'name': 'LPG gas', 'data': corrected_lpg_reading}]
+
+    hours = map(sanitize_time, ["{0}00".format(i) for i in range(1,25)])
+    hours_clean = [hours[d_start.hour] for d_start, d_end in dates]
+    data_to_dump = {'payload': data_list, 'dates': hours_clean}
     data = json.dumps(data_to_dump)
     return HttpResponse(data, mimetype='application/json')
 
@@ -235,18 +303,25 @@ def chart_json_station_m(request, pk):
     return HttpResponse(data, mimetype='application/json')
 
 
-class StationDetailView(DetailView):
+def station_detail(request, pk):
+    station = get_object_or_404(Station, pk=pk)
+    form = StationForm()
+    readings = station.analyser.readings.all()
 
-    model = Station
 
-    def get_context_data(self, **kwargs):
-        context = super(StationDetailView, self).get_context_data(**kwargs)
-        # you can override the contxt dict values
-        context['form'] = StationForm()
-        station = context['object']
-        readings = station.analyser.readings.all()
-        context['readings'] = readings
-        return context
+    if request.method == 'POST':
+        form = StationForm(request.POST)
+        station_name = form.data['autocomplete']
+
+        if station_name:
+            station = Station.objects.filter(station_name__icontains=station_name)
+            if station.exists():
+                station = station[0]
+                return redirect('station-detail', pk=station.pk)
+            else:
+                return redirect('station-detail', pk=pk)
+    return render_to_response('hewa/station_detail.html', {'form': StationForm, 'readings': readings, 'object': station}, 
+        RequestContext(request))
 
 
 def station_list(request):
