@@ -16,12 +16,12 @@ class AirQualityReading(models.Model):
         null=True, 
         default=datetime.datetime.now())
 
-    def __unicode__(self):
-        return "{0}, {1}, {2}".format(
-            self.carbonmonoxide_sensor_reading,
-            self.nitrogendioxide_sensor_reading,
-            self.lpg_gas_sensor_reading
-        )#self.created_at #what you want to see when interacting with the database
+    # def __unicode__(self):
+    #     return "{0}, {1}, {2}".format(
+    #         self.carbonmonoxide_sensor_reading,
+    #         self.nitrogendioxide_sensor_reading,
+    #         self.lpg_gas_sensor_reading
+    #     )#self.created_at #what you want to see when interacting with the database
 
 
 class Analyser(models.Model):    
@@ -53,7 +53,7 @@ class Analyser(models.Model):
     carbonmonoxide_sensor_present = models.BooleanField(default=False)
     nitrogendioxide_sensor_present = models.BooleanField(default=False)
     lpg_gas_sensor_present = models.BooleanField(default=False)
-    readings = models.ManyToManyField(AirQualityReading)
+    readings = models.ManyToManyField(AirQualityReading, blank=True)
     registered_at = models.DateTimeField(auto_now=True, default=datetime.datetime.today())
 
     def __unicode__(self):

@@ -4,7 +4,7 @@ var map;
 
 function initialize() {
   var mapOptions = {
-    zoom: 7,
+    zoom: 12,
     center: kampala
   };
 
@@ -35,19 +35,6 @@ function initialize() {
 			});
 		});
 	});
-
-	var infowindow = new google.maps.InfoWindow({
-		content: 'Welcome to QualiHewa'
-	})
-	marker = new google.maps.Marker({
-		position: kampala,
-		map: map,
-		title: 'Kampala'
-	});
-	google.maps.event.addListener(marker, 'click', function(){
-		infowindow.open(map, marker);
-	});
-
 
 }
 

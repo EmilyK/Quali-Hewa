@@ -21,7 +21,13 @@ function generateChart(url, title, tooltip){
                 plotLines: [{
                 color: '#FFFF00',
                 width: 2,
-                value: 30 
+                value: 30,
+                label: {text: "lpg gas limit at 30pmm"}
+                }, {
+                color: 'red',
+                width: 2,
+                value: 6,
+                label: {text: "carbon monoxide limit at 6pmm"} 
                 }]
             },
             tooltip: {

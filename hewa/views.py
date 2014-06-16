@@ -387,3 +387,47 @@ def export(request):
 
     w.save(response)
     return response
+
+
+def export_station(request, pk):
+    response = HttpResponse(mimetype='application/ms-excel')
+    response['Content-Disposition'] = "attachment; filename=export.xls"
+
+    w = xlwt.Workbook()
+    ws1 = w.add_sheet('Reading')
+
+    ws1.write(0, 0, 'Station Name')
+    ws1.write(0, 1, 'Created at')
+    ws1.write(0, 2, 'carbonmonoxide')
+    ws1.write(0, 3, 'nitrogendioxide')
+    ws1.write(0, 4, 'Lpg gas')
+
+    H = 1
+    V = 2
+    HF = H + 2
+    VF = V + 2
+
+    ws1.panes_frozen = True
+    ws1.horz_split_pos = H
+    ws1.horz_split_first_visible = HF
+
+    data = []
+    station = get_object_or_404(Station, pk=pk)
+    for reading in station.analyser.readings.all():
+        data.append(
+            (reading.analyser_set.values_list('station__station_name',flat=True)[0],
+            reading.created_at,
+            reading.carbonmonoxide_sensor_reading,
+            reading.nitrogendioxide_sensor_reading,
+            reading.lpg_gas_sensor_reading))
+
+    for index, _row_data in enumerate(data):
+        row = ws1.row(index+1)
+        for i, _data in enumerate(_row_data):
+            if type(_data) == datetime.datetime:
+                row.write(i, _data.strftime("%B %d, %Y"))
+            else:
+                row.write(i, _data)
+
+    w.save(response)
+    return response
