@@ -16,12 +16,12 @@ class AirQualityReading(models.Model):
         null=True, 
         default=datetime.datetime.now())
 
-    def __unicode__(self):
-        return "{0}, {1}, {2}".format(
-            self.carbonmonoxide_sensor_reading,
-            self.nitrogendioxide_sensor_reading,
-            self.lpg_gas_sensor_reading
-        )#self.created_at #what you want to see when interacting with the database
+    # def __unicode__(self):
+    #     return "{0}, {1}, {2}".format(
+    #         self.carbonmonoxide_sensor_reading,
+    #         self.nitrogendioxide_sensor_reading,
+    #         self.lpg_gas_sensor_reading
+    #     )#self.created_at #what you want to see when interacting with the database
 
 
 class Analyser(models.Model):    
@@ -53,7 +53,7 @@ class Analyser(models.Model):
     carbonmonoxide_sensor_present = models.BooleanField(default=False)
     nitrogendioxide_sensor_present = models.BooleanField(default=False)
     lpg_gas_sensor_present = models.BooleanField(default=False)
-    readings = models.ManyToManyField(AirQualityReading)
+    readings = models.ManyToManyField(AirQualityReading, blank=True)
     registered_at = models.DateTimeField(auto_now=True, default=datetime.datetime.today())
 
     def __unicode__(self):
@@ -79,21 +79,4 @@ class Station(models.Model):
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
-        return reverse('station-detail', args=[str(self.id)])
-
-# class Station(models.Model):
-# 	station_name = models.CharField(max_length=100, null=False) # Name of Station
-# 	# can a plane Decimal field work?
-# 	lat = models.FloatField(('Latitude'), blank=True, null=True)
-# 	lon = models.FloatField(('Longitude'), blank=True, null=True)
-# 	analyser = models.ForeignKey(Analyser)
-
-# 	def __unicode__(self):
-# 		#TODO -> station_name doesn't exist
-# 		return self.station_name
-
-    #def get_absolute_url(self):
-        #pass
-    
-
-    
+        return reverse('station-detail', args=[self.id,])

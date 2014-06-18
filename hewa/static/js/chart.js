@@ -1,5 +1,5 @@
 /* function to generate chart */
-function generateChart(url, title){
+function generateChart(url, title, tooltip){
 
     $.getJSON(url, function(data){
         $('#container').highcharts({
@@ -19,9 +19,15 @@ function generateChart(url, title){
                     text: 'Readings(parts per million)'
                 },
                 plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
+                color: '#FFFF00',
+                width: 2,
+                value: 30,
+                label: {text: "lpg gas limit at 30pmm"}
+                }, {
+                color: 'red',
+                width: 2,
+                value: 6,
+                label: {text: "carbon monoxide limit at 6pmm"} 
                 }]
             },
             tooltip: {
@@ -49,6 +55,8 @@ $(function(){
         var selectedValue = selectBox.options[selectBox.selectedIndex].value;
         if (selectedValue === 'monthly'){
             generateChart('/chart-data/monthly', 'Monthly Average readings from all stations');
+        }else if (selectedValue === 'daily'){
+            generateChart('/chart-data/daily', 'Daily Average readings from all stations');
         }else{
             generateChart('/chart-data', 'Weekly Average readings from all stations');
         }
