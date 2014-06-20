@@ -84,3 +84,9 @@ cp localsettings.py.example localsettings.py
 ```
 
 2) Edit the `localsettings.py` file in production or development with your database settings.
+
+3) Install project dependence
+
+```
+pip install -U -r requirements.txt
+```

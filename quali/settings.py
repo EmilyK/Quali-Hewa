@@ -37,7 +37,6 @@ INSTALLED_APPS = (
 
     'hewa',
     
-    # the `djgeojson` returns GeoJSON
     'django_tables2',
     'tastypie',
     'selectable',
