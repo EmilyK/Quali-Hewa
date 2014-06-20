@@ -1,0 +1,12 @@
+DEBUG = True
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'qualihewa',
+        'PASSWORD': "change-password",
+        'USER': 'root',
+        'PORT': '3306',
+        'HOST': '127.0.0.1' # 127.0.0.1
+    }
+}
