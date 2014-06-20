@@ -92,3 +92,5 @@ pip install -U -r requirements.txt
 ```
 
 Reference: http://www.jeffknupp.com/blog/2013/12/18/starting-a-django-16-project-the-right-way/
+
+Installing `ReportLab` on windows: http://stackoverflow.com/questions/13571141/getting-error-unable-to-find-vcvarsall-bat-then-runtimeerror-autoconf-error
