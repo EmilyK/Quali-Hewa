@@ -13,6 +13,7 @@ v1_api.register(AirQualityReadingResource())
 
 urlpatterns = patterns('',
  	url(r'^$',views.index, name = 'index'),
+    url(r'^about/$',views.about, name = 'about'),
     url(r'^stations/$',views.station_list, name = 'stations'),
     url(r'^stations/(?P<pk>\d+)/$', views.station_detail, name='station-detail'),
     url(r'^chart-data/$',views.chart_json, name = 'chart-data-all'),
