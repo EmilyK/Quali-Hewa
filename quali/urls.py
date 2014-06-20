@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from hewa.views import *
+from hewa import views
 from django.contrib import admin
 from hewa.api import StationResource, AnalyserResource, AirQualityReadingResource
 from tastypie.api import Api 
