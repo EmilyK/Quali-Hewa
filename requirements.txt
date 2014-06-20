@@ -1,0 +1,9 @@
+django
+django-tables
+pdfkit
+xlwt
+xlrd
+tastypie
+selectable
+selectable_select2
+south
