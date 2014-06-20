@@ -72,3 +72,15 @@ other_station.analyser.readings.all()
 
 # please look at the django ORM API and learn to use it.
 ```
+
+
+Deploying this project
+======================
+
+1) make a copy of localsettings.py.example
+
+```
+cp localsettings.py.example localsettings.py
+```
+
+2) Edit the `localsettings.py` file in production or development with your database settings.
