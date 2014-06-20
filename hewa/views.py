@@ -50,7 +50,7 @@ def index(request):
         return render_to_response('hewa/index.html', {'form': form, 'stations': Station.objects.all(), 
             'readings': readings}, RequestContext(request))
 
-#chart algorithim for all the stations weekly
+
 def chart_json(request):
     #This variable excludes all analysers that are not assigned to stations and only gets analysers with readings.
     analysers = [analyser for analyser in Analyser.objects.exclude(station=None) if analyser.readings.exists()]
@@ -66,16 +66,17 @@ def chart_json(request):
 
     dates = sorted(dates) # sort the days in ascending order
 
-
+	#initialize carbonmonoxide, nitrogenmonoxide, lpdg gas totals
     co_reading_total = []
     no_reading_total = []
     lpg_reading_total = []
 
     for analyser in analysers:
-
+		#initialize carbonmonoxide, nitrogenmonoxide, lpdg gas readings
         co_reading = []
         no_reading = []
         lpg_reading = []
+		#check if analyser readings exist
         if analyser.readings.exists():
 
             for date in dates:
@@ -87,19 +88,21 @@ def chart_json(request):
                     co += reading.carbonmonoxide_sensor_reading
                     no += reading.nitrogendioxide_sensor_reading
                     lpg += reading.lpg_gas_sensor_reading
-
+				#add data to CO, NO, LPG readings variables
                 co_reading.append(co)
                 no_reading.append(no)
                 lpg_reading.append(lpg)
+		#add data to CO, NO, LPG totalreadings variables		
         co_reading_total.append(co_reading)
         no_reading_total.append(no_reading)
         lpg_reading_total.append(lpg_reading)
 
-
+	#calculate  average readings  
     corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
     corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
     corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
-
+	
+	#add corrected readings to json string
     data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
                             {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
                             {'name': 'LPG gas', 'data': corrected_lpg_reading}]
@@ -112,14 +115,14 @@ def chart_json(request):
     data = json.dumps(data_to_dump)
     return HttpResponse(data, mimetype='application/json')
 
-
+#function sanitize_time to check for correct time format
 def sanitize_time(time_str):
     if len(time_str) == 3:
         return "0{0}".format(time_str)
     else:
         return time_str
 
-#chart algorithim for all the stations daily
+
 def chart_json_daily(request):
     analysers = [analyser for analyser in Analyser.objects.exclude(station=None) if analyser.readings.exists()]
     data_list = []
@@ -181,7 +184,6 @@ def chart_json_daily(request):
     return HttpResponse(data, mimetype='application/json')
 
 
-#chart algorithim for all the stations monthly
 def chart_json_monthly(request):
     analysers = [analyser for analyser in Analyser.objects.exclude(station=None) if analyser.readings.exists()]
     data_list = []
@@ -240,14 +242,14 @@ def chart_json_monthly(request):
     data = json.dumps(data_to_dump)
     return HttpResponse(data, mimetype='application/json')
    
-
+#function chart_json_station returns station for which data is being plotted
 def chart_json_station(request, pk):
     data_to_dump = {'key': 'value'}
     data = json.dumps(data_to_dump)
     return HttpResponse(data, mimetype='application/json')
 
 
-
+#function map_geojson_all_stations adds all stations to the maps
 def map_geojson_all_stations(request):
     stations = Station.objects.all()
     data_to_dump = []

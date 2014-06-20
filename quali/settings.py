@@ -6,11 +6,8 @@ import os
 PROJECT_PATH = os.path.dirname(os.path.dirname(__file__))
 
 SETTINGS_DIR=os.path.join(PROJECT_PATH,'settings.py')
-STATICFILES_DIRS = (
-    os.path.join(
-        os.path.dirname(__file__),
-        'static',),
-    )
+STATICFILES_DIRS = os.path.join(PROJECT_PATH,'hewa/static'),
+    
 
 PROJECT_PATH = os.path.join(SETTINGS_DIR, os.pardir)
 PROJECT_PATH = os.path.abspath(PROJECT_PATH)
@@ -38,7 +35,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_extensions',
     # 'contrib.staticfiles',
-    # 'django.contrib.sites',
+    'django.contrib.sites',
 
     'hewa',
     
@@ -79,7 +76,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'qualihewa',
-        'PASSWORD': "",
+        'PASSWORD': "rs4",
         'USER': 'root',
         'PORT': '3306',
         'HOST': '127.0.0.1' # 127.0.0.1
