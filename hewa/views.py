@@ -15,11 +15,14 @@ from django.views.generic.detail import DetailView
 from django.views.generic import ListView
 
 
+def about(request):
+    return render_to_response('hewa/about.html', {}, RequestContext(request))
+
 def index(request):
-    analysers = Analyser.objects.exclude(station=None)
+    analysers = Analyser.objects.exclude(station=None)#Excludes analysers not assigned to stations.
     form = StationForm()
 
-    if request.method == 'POST':
+    if request.method == 'POST': #For the search box
         form = StationForm(request.POST)
         station_name = form.data['autocomplete']
 
@@ -27,7 +30,7 @@ def index(request):
             station = Station.objects.filter(station_name__icontains=station_name)
             if station.exists():
                 station = station[0]
-                return redirect('station-detail', pk=station.pk)
+                return redirect('station-detail', pk=station.pk)#Station detail is the template with all inffo about a particular stations
             else:
                 return redirect('index')
         else:
@@ -47,7 +50,9 @@ def index(request):
         return render_to_response('hewa/index.html', {'form': form, 'stations': Station.objects.all(), 
             'readings': readings}, RequestContext(request))
 
+#chart algorithim for all the stations weekly
 def chart_json(request):
+    #This variable excludes all analysers that are not assigned to stations and only gets analysers with readings.
     analysers = [analyser for analyser in Analyser.objects.exclude(station=None) if analyser.readings.exists()]
     data_list = []
     dates = []
@@ -114,7 +119,7 @@ def sanitize_time(time_str):
     else:
         return time_str
 
-
+#chart algorithim for all the stations daily
 def chart_json_daily(request):
     analysers = [analyser for analyser in Analyser.objects.exclude(station=None) if analyser.readings.exists()]
     data_list = []
@@ -176,7 +181,7 @@ def chart_json_daily(request):
     return HttpResponse(data, mimetype='application/json')
 
 
-
+#chart algorithim for all the stations monthly
 def chart_json_monthly(request):
     analysers = [analyser for analyser in Analyser.objects.exclude(station=None) if analyser.readings.exists()]
     data_list = []
@@ -290,16 +295,208 @@ def map_geojson_station(request, pk):
     return HttpResponse(data, mimetype='application/json')
 
 
-def chart_json_station_w(request, pk):
-    data_to_dump = {'key': 'value'}
-    data = json.dumps(data_to_dump)
-    return HttpResponse(data, mimetype='application/json')
-
-
+#chart algorithim for a specific station monthly
 def chart_json_station_m(request, pk):
-    data_to_dump = {'key': 'value'}
+    
+    station = get_object_or_404(Station, pk=pk)
+    analysers = [station.analyser]
+
+    data_list = []
+    dates = []
+    now = datetime.datetime.now()
+
+    for i in range(12):
+        dates.append(
+            (now+relativedelta(months=-i, days=0, hours=0),#beginning of the month
+            now+relativedelta(months=-i, days=30, hours=24),#end of the month
+            ))
+
+    # dates = sorted(dates) # sort the months in ascending order
+    dates.reverse()
+
+    co_reading_total = []
+    no_reading_total = []
+    lpg_reading_total = []
+
+    for analyser in analysers:
+
+        co_reading = []
+        no_reading = []
+        lpg_reading = []
+        if analyser.readings.exists():
+
+            for date in dates:
+                readings = analyser.readings.filter(created_at__range=date)
+                co = 0
+                no = 0
+                lpg = 0
+                for reading in readings:
+                    co += reading.carbonmonoxide_sensor_reading
+                    no += reading.nitrogendioxide_sensor_reading
+                    lpg += reading.lpg_gas_sensor_reading
+
+                co_reading.append(co)
+                no_reading.append(no)
+                lpg_reading.append(lpg)
+        co_reading_total.append(co_reading)
+        no_reading_total.append(no_reading)
+        lpg_reading_total.append(lpg_reading)
+
+
+    corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
+    corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
+    corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
+
+    data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
+                            {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
+                            {'name': 'LPG gas', 'data': corrected_lpg_reading}]
+
+    months = ['Jan', 'feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    months_clean = [months[d_start.month-1] for d_start, d_end in dates]
+    data_to_dump = {'payload': data_list, 'dates': months_clean}
     data = json.dumps(data_to_dump)
     return HttpResponse(data, mimetype='application/json')
+
+
+#Plots chart  of a specific station for weekly data
+def chart_json_station_w(request, pk):
+    # fetch data from database about station
+    station = get_object_or_404(Station, pk=pk)
+
+    # set the station's analyser below
+    analysers = [station.analyser]
+
+    #helper variables to help with algorithm also below
+    data_list = []
+    dates = []
+    now = datetime.datetime.now()
+
+    # set date ranges
+    for i in range(7):
+        dates.append(
+            (now+relativedelta(days=-i, hour=0,minute=0, second=0, microsecond=0),#beginning of the day
+            now+relativedelta(days=-i, hour=23,minute=59, second=0, microsecond=0),#end of the day
+            ))
+
+    dates = sorted(dates) # sort the days in ascending order
+
+    # placeholder for accumulated readings (from database)
+    co_reading_total = []
+    no_reading_total = []
+    lpg_reading_total = []
+
+    for analyser in analysers:
+
+        co_reading = []
+        no_reading = []
+        lpg_reading = []
+        if analyser.readings.exists():
+
+            for date in dates:
+                readings = analyser.readings.filter(created_at__range=date)
+                co = 0
+                no = 0
+                lpg = 0
+                for reading in readings:
+                    co += reading.carbonmonoxide_sensor_reading
+                    no += reading.nitrogendioxide_sensor_reading
+                    lpg += reading.lpg_gas_sensor_reading
+
+                co_reading.append(co)
+                no_reading.append(no)
+                lpg_reading.append(lpg)
+        co_reading_total.append(co_reading)
+        no_reading_total.append(no_reading)
+        lpg_reading_total.append(lpg_reading)
+
+
+    corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
+    corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
+    corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
+
+    data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
+                            {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
+                            {'name': 'LPG gas', 'data': corrected_lpg_reading}]
+
+    days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    dates_clean = [days[d_start.weekday()] for d_start, d_end in dates]
+
+    data_to_dump = {'payload': data_list, 'dates': dates_clean }
+
+    data = json.dumps(data_to_dump)
+    return HttpResponse(data, mimetype='application/json')
+
+
+#Plots chart  of a specific station for daily data
+def chart_json_station_d(request, pk):
+    # fetch data from database about station
+    station = get_object_or_404(Station, pk=pk)
+
+    # set the station's analyser below
+    analysers = [station.analyser]
+
+    #helper variables to help with algorithm also below
+    data_list = []
+    dates = []
+    now = datetime.datetime.now()
+    new_now = datetime.datetime(now.year, now.month, now.day, now.hour)
+
+    # set date ranges
+    for i in range(1, 24):
+        dates.append(
+            (new_now + relativedelta(hours=-i, minute=0, second=0, microsecond=0),#beginning of the day
+            new_now + relativedelta(hours=-i, minute=59, second=0, microsecond=0),#end of the day
+            ))
+
+    dates.reverse() # sort the hours in ascending order
+
+   
+
+    # placeholder for accumulated readings (from database)
+    co_reading_total = []
+    no_reading_total = []
+    lpg_reading_total = []
+
+    for analyser in analysers:
+
+        co_reading = []
+        no_reading = []
+        lpg_reading = []
+        if analyser.readings.exists():
+
+            for date in dates:
+                readings = analyser.readings.filter(created_at__range=date)
+                co = 0
+                no = 0
+                lpg = 0
+                for reading in readings:
+                    co += reading.carbonmonoxide_sensor_reading
+                    no += reading.nitrogendioxide_sensor_reading
+                    lpg += reading.lpg_gas_sensor_reading
+
+                co_reading.append(co)
+                no_reading.append(no)
+                lpg_reading.append(lpg)
+        co_reading_total.append(co_reading)
+        no_reading_total.append(no_reading)
+        lpg_reading_total.append(lpg_reading)
+
+
+    corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
+    corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
+    corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
+
+    data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
+                            {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
+                            {'name': 'LPG gas', 'data': corrected_lpg_reading}]
+
+    hours = map(sanitize_time, ["{0}00".format(i) for i in range(1,25)])
+    hours_clean = [hours[d_start.hour] for d_start, d_end in dates]
+    data_to_dump = {'payload': data_list, 'dates': hours_clean}
+    data = json.dumps(data_to_dump)
+    return HttpResponse(data, mimetype='application/json')
+
+    
 
 
 def station_detail(request, pk):
@@ -341,11 +538,7 @@ def station_list(request):
         RequestContext(request))
 
 
-def station_json(request):
-	# http://stackoverflow.com/questions/20890955/mapbox-show-tooltips-by-default-without-having-to-click-a-marker
-	return
-
-
+#For exporting data for all stations
 def export(request):
     response = HttpResponse(mimetype='application/ms-excel')
     response['Content-Disposition'] = "attachment; filename=export.xls"
@@ -389,6 +582,7 @@ def export(request):
     return response
 
 
+#For exporting data for a particular station
 def export_station(request, pk):
     response = HttpResponse(mimetype='application/ms-excel')
     response['Content-Disposition'] = "attachment; filename=export.xls"
