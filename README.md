@@ -62,7 +62,7 @@ a_reading = station.analyser.readings.create(
 a_reading.save()
 ```
 
-If you want to in the future get the readings at a station
+If you want to get readings in the future at a particular station
 
 
 ```python
