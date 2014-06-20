@@ -15,7 +15,9 @@ class AirQualityReading(models.Model):
         auto_now_add=True,
         null=True, 
         default=datetime.datetime.now())
-    station = analyser = models.ForeignKey(station)
+
+    #TODO this is wrong
+    # station = analyser = models.ForeignKey(station)
 
     # def __unicode__(self):
     #     return "{0}, {1}, {2}".format(
