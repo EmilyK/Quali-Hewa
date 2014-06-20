@@ -10,33 +10,36 @@ CRUD operations
 
 Create:
 
-```console
+```
 >>> Analyser.object.create() # creates an empty record
 ```
 
 We can store this in a variable
 
-```console
+
+```
 >>> analyser = Analyser.objects.create() # our defaults be kawa, you know.
 >>> analyser.save() # use the `save()` method to save the analyser
-```console
+```
+
 
 Read:
 
-```console
+
+```
 >>> Analyser.objects.all() # fetches all analysers
 ```
 
 You can filter or pick a particular set of analysers too
 
-```console
+```
 >>> Analyser.objects.filter(id=1) # e.g. by id or primary key (kisumulozo)
 >>> Analyser.objects.filter(pk=1)
 ```
 
 Or search by fields or columns
 
-```console
+```
 >>> Analyser.objects.filter(carbonmonoxide_sensor_present=False)
 ```
 
