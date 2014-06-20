@@ -3,7 +3,9 @@ django-tables
 pdfkit
 xlwt
 xlrd
-tastypie
-selectable
-selectable_select2
-south
+django-tastypie
+django-selectable
+django-selectable_select2
+South
+django-extensions
+python-dateutil
