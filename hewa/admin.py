@@ -11,10 +11,14 @@ class AnalyserAdmin(admin.ModelAdmin):
 	 'lpg_gas_sensor_present', 'registered_at')
 
 class AirQualityReadingAdmin(admin.ModelAdmin):
-	list_display = ('analyser_set','carbonmonoxide_sensor_reading','nitrogendioxide_sensor_reading',
+	list_display = ('station','carbonmonoxide_sensor_reading','nitrogendioxide_sensor_reading',
 		'lpg_gas_sensor_reading', 'created_at')
-	
 
+	def station(self, obj):
+		if obj.analyser_set.exists():
+			return "{0}".format(obj.analyser_set.all()[0].__unicode__())
+		else:
+			return "Analyser has readings (no station)"
    
 admin.site.register(Station, StationAdmin)
 admin.site.register(Analyser, AnalyserAdmin)
