@@ -1,5 +1,3 @@
-
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -75,8 +73,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'qualihewa',
-        'PASSWORD': "rs4",
+        'NAME': 'look-at-localsettings.py',
+        'PASSWORD': "change-password-at-localsettings",
         'USER': 'root',
         'PORT': '3306',
         'HOST': '127.0.0.1' # 127.0.0.1
@@ -107,3 +105,14 @@ STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
 STATIC_URL = '/static/'
 
 
+# this is where the magic happens
+try:
+    import sys
+    if os.environ.has_key('LOCAL_SETTINGS'):
+        # the LOCAL_SETTINGS environment variable is used by the build server
+        sys.path.insert(0, os.path.dirname(os.environ['LOCAL_SETTINGS']))
+        from settings_test import *
+    else:
+        from localsettings import *
+except ImportError:
+    pass
