@@ -1,4 +1,4 @@
-DEBUG = True
+DEBUG = False  # this is set to False in production
 
 DATABASES = {
     'default': {
