@@ -83,9 +83,9 @@ Deploying this project
 cp localsettings.py.example localsettings.py
 ```
 
-2) Edit the `localsettings.py` file in production or development with your database settings.
+2) Edit the `localsettings.py` file in production or development with your database settings such as passwords or usernames or even other database systems.
 
-3) Install project dependence
+3) Install project dependency
 
 ```
 pip install -U -r requirements.txt
