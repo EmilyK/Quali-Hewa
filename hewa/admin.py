@@ -7,8 +7,17 @@ class StationAdmin(admin.ModelAdmin):
 	
 
 class AnalyserAdmin(admin.ModelAdmin):
-	list_display = ('carbonmonoxide_sensor_present','nitrogendioxide_sensor_present',
-	 'lpg_gas_sensor_present', 'registered_at')
+	list_display = ('station', 
+		'carbonmonoxide_sensor_present', 
+		'nitrogendioxide_sensor_present',
+	 	'lpg_gas_sensor_present', 
+	 	'registered_at')
+
+	def station(self, obj):
+		if obj.station_set.exists():
+			return obj.station_set.all()[0]
+		else:
+			return "This analyser has not been assigned to a station"
 
 class AirQualityReadingAdmin(admin.ModelAdmin):
 	list_display = ('station','carbonmonoxide_sensor_reading','nitrogendioxide_sensor_reading',
