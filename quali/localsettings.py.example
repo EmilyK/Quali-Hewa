@@ -1,3 +1,4 @@
+#File you need to create in the production  server
 DEBUG = False  # this is set to False in production
 
 DATABASES = {
