@@ -8,3 +8,10 @@ class StationForm(forms.Form):
 	autocomplete = forms.CharField(label='Type the name of station',
 					widget=selectable_forms.AutoCompleteWidget(StationLookup),
 					required=False)
+
+
+class UploadForm(forms.Form):
+	identifier = forms.CharField(required=True)
+	carbonmonoxide_sensor_reading = forms.DecimalField(required=True)
+	nitrogendioxide_sensor_reading = forms.DecimalField(required=True)
+	lpg_gas_sensor_reading = forms.DecimalField(required=True)
