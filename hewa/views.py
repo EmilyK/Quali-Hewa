@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404, RequestContext
+from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import simplejson as json
 import xlwt
 from io import BytesIO
@@ -12,7 +14,7 @@ from django.shortcuts import render_to_response, redirect
 from django_tables2 import RequestConfig
 from hewa.tables import StationTable
 from hewa.models import Station, Analyser, AirQualityReading
-from .forms import StationForm
+from .forms import StationForm, UploadForm
 from django.views.generic.detail import DetailView
 from django.views.generic import ListView
 
@@ -20,7 +22,11 @@ from django.views.generic import ListView
 def about(request):
     return render_to_response('hewa/about.html', {}, RequestContext(request))
 
-def index(request):
+def home(request):
+    return render_to_response('hewa/home.html', {}, RequestContext(request))
+
+
+def dashboard(request):
     analysers = Analyser.objects.exclude(station=None)#Excludes analysers not assigned to stations.
     form = StationForm()
 
@@ -34,9 +40,9 @@ def index(request):
                 station = station[0]
                 return redirect('station-detail', pk=station.pk)#Station detail is the template with all inffo about a particular stations
             else:
-                return redirect('index')
+                return redirect('dashboard')
         else:
-            return redirect('index') # user hasn't typed anything in the search box
+            return redirect('dashboard') # user hasn't typed anything in the search box
     else:
         form = StationForm()
         readings = []
@@ -49,7 +55,7 @@ def index(request):
                         reading.nitrogendioxide_sensor_reading,
                         reading.lpg_gas_sensor_reading,
                         reading.created_at))
-        return render_to_response('hewa/index.html', {'form': form, 'stations': Station.objects.all(), 
+        return render_to_response('hewa/dashboard.html', {'form': form, 'stations': Station.objects.all(), 
             'readings': readings}, RequestContext(request))
 
 
@@ -590,7 +596,7 @@ def export_pdf(request):
     response = HttpResponse(mimetype='application/pdf')
     response['Content-Disposition'] = "attachment; filename=export.pdf"
     buffer = BytesIO()
-    p.canvas.Cavnas(buffer)
+    p = canvas.Canvas(buffer)
     p.drawString(100, 100, 'Reading')
 
     # ws1.write(0, 0, 'Station Name')
@@ -609,12 +615,16 @@ def export_pdf(request):
             reading.lpg_gas_sensor_reading))
 
     for index, _row_data in enumerate(data):
-        row = ws1.row(index+1)
+        # row = ws1.row(index+1)
+        print "Please get a pdf object here some how"
+        # e.g. p.drawString(), etc.
         for i, _data in enumerate(_row_data):
             if type(_data) == datetime.datetime:
-                row.write(i, _data.strftime("%B %d, %Y"))
+                print "replace this with the code to write to pdf"
+                # row.write(i, _data.strftime("%B %d, %Y"))
             else:
-                row.write(i, _data)
+                print "replace this wit the code to write to a pdf"
+                # row.write(i, _data)
 
     p.showPage()
     p.save()
@@ -669,3 +679,41 @@ def export_station(request, pk):
 
     w.save(response)
     return response
+
+
+@csrf_exempt
+def upload(request):
+    if request.method == 'POST':
+        form = UploadForm(request.POST)
+        if form.is_valid():
+            # pick the values from form
+            data = form.data
+            identifier = data['identifier']
+            try:
+                carbonmonoxide_sensor_reading = float(data['carbonmonoxide_sensor_reading'])
+                nitrogendioxide_sensor_reading = float(data['nitrogendioxide_sensor_reading'])
+                lpg_gas_sensor_reading = float(data['lpg_gas_sensor_reading'])
+            except ValueError:
+                return HttpResponse(
+                    json.dumps({'error': 'One of the sensor values is in the wrong format! Only numbers (float or Integer allowed)'}),
+                    mimetype='application/json')
+
+            # get analyser
+            try:
+                analyser = Analyser.objects.exclude(station=None).get(identifier=identifier)
+                analyser.readings.create(
+                    carbonmonoxide_sensor_reading=carbonmonoxide_sensor_reading,
+                    nitrogendioxide_sensor_reading=nitrogendioxide_sensor_reading,
+                    lpg_gas_sensor_reading=lpg_gas_sensor_reading
+                    )
+                # save!
+                analyser.save()  # might not be required!
+                return HttpResponse(json.dumps({'result': 'OK'}), mimetype='application/json')
+
+            except ObjectDoesNotExist:
+                return HttpResponse(
+                    json.dumps({'error': 'Analyser could not be found using this identifier'}),
+                    mimetype='application/json')
+        else:
+            return HttpResponse(json.dumps({'error': 'Form invalid'}),
+                mimetype='application/json')
