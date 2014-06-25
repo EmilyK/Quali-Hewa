@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'hewa',
     
     'django_tables2',
-    'tastypie',
+    # 'tastypie',
     'selectable',
     'selectable_select2',
     'south', #For managing changes to your database tables via data migrations.
