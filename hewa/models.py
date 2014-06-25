@@ -16,16 +16,6 @@ class AirQualityReading(models.Model):
         null=True, 
         default=datetime.datetime.now())
 
-    #TODO this is wrong
-    # station = analyser = models.ForeignKey(station)
-
-    # def __unicode__(self):
-    #     return "{0}, {1}, {2}".format(
-    #         self.carbonmonoxide_sensor_reading,
-    #         self.nitrogendioxide_sensor_reading,
-    #         self.lpg_gas_sensor_reading
-    #     )#self.created_at #what you want to see when interacting with the database
-
 
 class Analyser(models.Model):    
     """
@@ -53,6 +43,7 @@ class Analyser(models.Model):
     Or search by fields or columns
     >>> Analyser.objects.filter(carbonmonoxide_sensor_present=False)
     """
+    identifier = models.CharField(unique=True, null=True, max_length=140)
     carbonmonoxide_sensor_present = models.BooleanField(default=False)
     nitrogendioxide_sensor_present = models.BooleanField(default=False)
     lpg_gas_sensor_present = models.BooleanField(default=False)
