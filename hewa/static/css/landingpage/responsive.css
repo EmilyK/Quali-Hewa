@@ -1,0 +1,354 @@
+/* --------------------------------------
+=========================================
+RESPONSIVE FIXES
+=========================================
+-----------------------------------------*/
+ 
+
+ @media (max-width: 991px) {
+ 
+    
+    body {
+        font-size: 15px;
+        line-height: 26px;
+    }
+
+    header .color-overlay {
+        min-height: 800px;
+    }
+
+    .app-brief .left-align {
+        text-align: center;
+    }
+
+    .colored-line-left {
+        float: none;
+        margin: auto;
+    }
+
+    .nav > li > a {
+        padding: 10px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+ 
+    
+    html {
+        font-size: 90%;
+    }
+
+    header .color-overlay {
+        min-height: 780px;
+    }
+
+    .sticky-navigation .navbar-header {
+        width: 100%;
+        position: relative;
+        text-align: center;
+        margin-top: 10px;
+    }
+    .sticky-navigation .navbar-header a {
+        float: none !important;
+    }
+    
+    .sticky-navigation .navbar-header img {
+        max-height: 40px;
+    }
+    
+    .sticky-navigation .main-navigation {
+        text-align: center;
+        width: 100%;
+        padding-top: 0;
+    }
+
+    header .intro-section {
+        padding-top: 10%;
+    }
+
+    .features .features-left,
+    .features .features-right {
+        margin-top: 0;
+    }
+
+    .features .features-left .icon-container,
+    .features .features-right .icon-container {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+ 
+    
+    html {
+        font-size: 80%;
+    }
+
+    body {
+        font-size: 15px;
+        line-height: 26px;
+    }
+
+    header .color-overlay {
+        min-height: 580px;
+    }
+
+    header .only-logo .navbar {
+        padding: 20px;
+    }
+    
+    .navbar-inverse .navbar-nav {
+        padding-left: 10px;
+        line-height: normal;
+        text-align: center;
+    }
+
+    .navbar-inverse .navbar-nav>li {
+        display: inline-block;
+        margin-bottom: 0;
+    }
+
+    header .intro-section {
+        padding-top: 9%;
+    }
+
+    .features .features-left,
+    .features .features-right {
+        text-align: center;
+        margin-top: 5px;
+    }
+
+    .features .feature {
+        margin-bottom: 70px;
+    }
+
+    .features .features-left .icon-container,
+    .features .features-right .icon-container {
+        float: none;
+        margin-left: inherit;
+        min-height: 70px;
+    }
+
+    .features .feature .icon-container .icon {
+        margin: auto;
+    }
+    
+    .download .subscription-form .input-box {
+        margin: auto;
+        width: 80%;
+        margin-bottom: 10px;
+    }
+
+    .navbar-brand {
+        padding: 0 15px;
+    }
+
+    .navbar-collapse {
+        margin-top: 20px
+    }
+
+    .navbar-toggle {
+        padding: 0 10px;
+    }
+
+    .navbar-default .navbar-toggle {
+        background-color: #FFF
+    }
+
+    .navbar-default .navbar-nav > li > a {
+        text-align: center
+    }
+
+    #header-nav-button {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .header-content h1 {
+        font-size: 220%;
+    }
+
+    .header-content h1+.subheading {
+        font-size: 100%
+    }
+
+    .getting-started-section .row {
+        padding: 0 0;
+    }
+
+    .company-logos {
+        width: 100%
+    }
+
+    .details {
+        text-align: center;
+    }
+
+    .section-header h2 {
+        font-size: 27px
+    }
+
+    .section-header .section-description {
+        font-size: 16px
+    }
+
+    .section-wrapper {
+        padding: 60px 0;
+    }
+
+    .app-brief h2 {
+        margin-top: 20px;
+    }
+
+    .custom-section-2 .phone-image img {
+        margin-top: 60px;
+    }
+
+    .pricing-item-section {
+        margin-bottom: 40px
+    }
+
+    .pricing-item-price-amount {
+        font-size: 48px;
+    }
+
+    .company,
+    .link-list {
+        margin-bottom: 40px
+    }
+
+    .pricing-item-price-unit {
+        font-size: 15px
+    }
+
+    .pricing-item-price-unit, .pricing-item-rice-currency {
+        top: -30px;
+    }
+
+    .image-on-left {
+        float: none;
+        margin-right: 0
+    }
+
+    .image-on-right {
+        margin-left: 0
+    }
+
+    .social-row {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .image-section {
+        display: block;
+        max-width: 164px;
+        margin: 0 auto;
+    }
+
+}
+
+@media (max-width: 480px) {
+ 
+    
+    html {
+        font-size: 65%;
+    }
+
+    header .color-overlay {
+        min-height: 480px;
+    }
+
+    header .only-logo .navbar {
+        padding: 10px;
+    }
+
+    header .intro-section {
+        padding-top: 2%;
+    }
+
+    header .intro-section .intro {
+        margin-bottom: 16px;
+    }
+
+    header .intro-section h5 {
+        color: #ffffff;
+    }
+
+    header .intro-section .buttons {
+        margin-top: 15px;
+    }
+
+    .testimonials, 
+    .download { 
+        background-attachment: inherit !important; 
+    }
+    
+    .download .subscription-form .input-box {
+        width: 95%;
+        height: 50px;
+    }
+
+    .standard-button,
+    .alternate-button,
+    .alternate-button-2 {
+        font-size: 100%;
+        min-width: 100px;
+        padding: 11px 20px 11px 20px;
+    }
+
+    .social-row li {
+        display: block;
+        text-align: center
+    }
+
+    .subscription-form-container {
+        margin-top: 25px;
+    }
+}
+
+@media (max-width: 320px) {
+ 
+    
+    html {
+        font-size: 60.5%;
+    }
+}
+
+
+@media (min-width: 320px) and (max-width: 640px) and  (orientation: landscape) {
+        
+    .full-screen h1 {
+        font-size: 30px !important;
+        line-height: 40px;
+        margin-top: 0;
+        font-weight: bold;
+    }
+    .full-screen .intro-section .intro {
+       margin-bottom: 0;
+            
+    }
+    
+    .full-screen .intro-section h5 {
+        
+        font-size: 14px;
+    }
+    .full-screen .intro-section .buttons { 
+        margin-top: 0;
+    }
+    
+    .full-screen .standard-button {
+        font-size: 14px;
+        padding: 8px 5px;
+    }
+
+    .full-screen .alternate-button {
+        font-size: 14px;
+        padding: 7px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .container {
+        width: 400px;
+    }
+}
