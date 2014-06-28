@@ -1,9 +1,10 @@
+#Testing lib
 import requests
 
 IDENTIFIER = 'kavule'
-csr = 43
-lpg = 20
-nsr = 10
+csr = 67
+lpg = 56
+nsr = 77
 url = 'http://localhost:8000/upload/'
 
 def start_upload(identifier=IDENTIFIER, url=url, csr=None, lpg=None, nsr=None):

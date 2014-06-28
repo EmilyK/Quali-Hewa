@@ -4,9 +4,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils import simplejson as json
 import xlwt
 from io import BytesIO
-from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 import datetime
 from dateutil.relativedelta import relativedelta
+from django.db.models import Avg
+
 
 # Create your views here.
 from django.http import HttpResponse
@@ -60,6 +64,9 @@ def dashboard(request):
 
 
 def chart_json(request):
+    """
+    This is for weekly JSON data for the chart.
+    """    
     #This variable excludes all analysers that are not assigned to stations and only gets analysers with readings.
     analysers = [analyser for analyser in Analyser.objects.exclude(station=None) if analyser.readings.exists()]
     data_list = []
@@ -74,46 +81,65 @@ def chart_json(request):
 
     dates = sorted(dates) # sort the days in ascending order
 
-	#initialize carbonmonoxide, nitrogenmonoxide, lpdg gas totals
-    co_reading_total = []
-    no_reading_total = []
-    lpg_reading_total = []
+    co_reading_avg = []
+    no_reading_avg = []
+    lpg_reading_avg = []
 
     for analyser in analysers:
-		#initialize carbonmonoxide, nitrogenmonoxide, lpdg gas readings
+
         co_reading = []
         no_reading = []
         lpg_reading = []
-		#check if analyser readings exist
         if analyser.readings.exists():
 
             for date in dates:
                 readings = analyser.readings.filter(created_at__range=date)
-                co = 0
-                no = 0
-                lpg = 0
-                for reading in readings:
-                    co += reading.carbonmonoxide_sensor_reading
-                    no += reading.nitrogendioxide_sensor_reading
-                    lpg += reading.lpg_gas_sensor_reading
-				#add data to CO, NO, LPG readings variables
+            
+                co = readings.aggregate(Avg('carbonmonoxide_sensor_reading'))['carbonmonoxide_sensor_reading__avg']
+                no = readings.aggregate(Avg('nitrogendioxide_sensor_reading'))['nitrogendioxide_sensor_reading__avg']
+                lpg = readings.aggregate(Avg('lpg_gas_sensor_reading'))['lpg_gas_sensor_reading__avg']
+
                 co_reading.append(co)
                 no_reading.append(no)
                 lpg_reading.append(lpg)
-		#add data to CO, NO, LPG totalreadings variables		
-        co_reading_total.append(co_reading)
-        no_reading_total.append(no_reading)
-        lpg_reading_total.append(lpg_reading)
 
-	#calculate  average readings  
-    corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
-    corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
-    corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
-	
-	#add corrected readings to json string
-    data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
-                            {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
-                            {'name': 'LPG gas', 'data': corrected_lpg_reading}]
+        co_reading_avg.append(co_reading)
+        no_reading_avg.append(no_reading)
+        lpg_reading_avg.append(lpg_reading)
+
+    # remove None
+    corrected_co_avg = []
+    for avg in co_reading_avg:
+        corrected_co_avg.append(map(remove_none, avg))
+    _corrected_co_avg = zip(*corrected_co_avg)
+    avg_of_averages_co = []
+    for i in _corrected_co_avg:
+        avg_of_averages_co.append(float(sum(i))/len(i))
+
+    corrected_no_avg = []
+    for avg in no_reading_avg:
+        corrected_no_avg.append(map(remove_none, avg))
+    _corrected_no_avg = zip(*corrected_no_avg)
+    avg_of_averages_no = []
+    for i in _corrected_no_avg:
+        avg_of_averages_no.append(float(sum(i))/len(i))
+
+
+    corrected_lpg_avg = []
+    for avg in lpg_reading_avg:
+        corrected_lpg_avg.append(map(remove_none, avg))
+    _corrected_lpg_avg = zip(*corrected_lpg_avg)
+    avg_of_averages_lpg = []
+    for i in _corrected_lpg_avg:
+        avg_of_averages_lpg.append(float(sum(i))/len(i))
+
+
+
+    data_list = [
+        {'name': 'Carbonmonoxide', 'data': avg_of_averages_co },
+        {'name': 'Nitrogendioxide', 'data': avg_of_averages_no},
+        {'name': 'LPG gas', 'data': avg_of_averages_lpg}]
+
 
     days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     dates_clean = [days[d_start.weekday()] for d_start, d_end in dates]
@@ -130,7 +156,13 @@ def sanitize_time(time_str):
     else:
         return time_str
 
+def remove_none(item):
+    if item == None:
+        return 0
+    else:
+        return item
 
+#Daily all stations
 def chart_json_daily(request):
     analysers = [analyser for analyser in Analyser.objects.exclude(station=None) if analyser.readings.exists()]
     data_list = []
@@ -147,10 +179,9 @@ def chart_json_daily(request):
 
     dates.reverse() # sort the months in ascending order
 
-
-    co_reading_total = []
-    no_reading_total = []
-    lpg_reading_total = []
+    co_reading_avg = []
+    no_reading_avg = []
+    lpg_reading_avg = []
 
     for analyser in analysers:
 
@@ -161,29 +192,49 @@ def chart_json_daily(request):
 
             for date in dates:
                 readings = analyser.readings.filter(created_at__range=date)
-                co = 0
-                no = 0
-                lpg = 0
-                for reading in readings:
-                    co += reading.carbonmonoxide_sensor_reading
-                    no += reading.nitrogendioxide_sensor_reading
-                    lpg += reading.lpg_gas_sensor_reading
+            
+                co = readings.aggregate(Avg('carbonmonoxide_sensor_reading'))['carbonmonoxide_sensor_reading__avg']
+                no = readings.aggregate(Avg('nitrogendioxide_sensor_reading'))['nitrogendioxide_sensor_reading__avg']
+                lpg = readings.aggregate(Avg('lpg_gas_sensor_reading'))['lpg_gas_sensor_reading__avg']
 
                 co_reading.append(co)
                 no_reading.append(no)
                 lpg_reading.append(lpg)
-        co_reading_total.append(co_reading)
-        no_reading_total.append(no_reading)
-        lpg_reading_total.append(lpg_reading)
+
+        co_reading_avg.append(co_reading)
+        no_reading_avg.append(no_reading)
+        lpg_reading_avg.append(lpg_reading)
+
+    # remove None
+    corrected_co_avg = []
+    for avg in co_reading_avg:
+        corrected_co_avg.append(map(remove_none, avg))
+    _corrected_co_avg = zip(*corrected_co_avg)
+    avg_of_averages_co = []
+    for i in _corrected_co_avg:
+        avg_of_averages_co.append(float(sum(i))/len(i))
+
+    corrected_no_avg = []
+    for avg in no_reading_avg:
+        corrected_no_avg.append(map(remove_none, avg))
+    _corrected_no_avg = zip(*corrected_no_avg)
+    avg_of_averages_no = []
+    for i in _corrected_no_avg:
+        avg_of_averages_no.append(float(sum(i))/len(i))
 
 
-    corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
-    corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
-    corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
+    corrected_lpg_avg = []
+    for avg in lpg_reading_avg:
+        corrected_lpg_avg.append(map(remove_none, avg))
+    _corrected_lpg_avg = zip(*corrected_lpg_avg)
+    avg_of_averages_lpg = []
+    for i in _corrected_lpg_avg:
+        avg_of_averages_lpg.append(float(sum(i))/len(i))
 
-    data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
-                            {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
-                            {'name': 'LPG gas', 'data': corrected_lpg_reading}]
+    data_list = [
+        {'name': 'Carbonmonoxide', 'data': avg_of_averages_co },
+        {'name': 'Nitrogendioxide', 'data': avg_of_averages_no},
+        {'name': 'LPG gas', 'data': avg_of_averages_lpg}]
 
     hours = map(sanitize_time, ["{0}00".format(i) for i in range(1,25)])
     hours_clean = [hours[d_start.hour] for d_start, d_end in dates]
@@ -193,6 +244,9 @@ def chart_json_daily(request):
 
 
 def chart_json_monthly(request):
+    """
+    Produce json output for all stations; this is consumed by chart javascript
+    """
     analysers = [analyser for analyser in Analyser.objects.exclude(station=None) if analyser.readings.exists()]
     data_list = []
     dates = []
@@ -207,9 +261,9 @@ def chart_json_monthly(request):
     dates = sorted(dates) # sort the months in ascending order
 
 
-    co_reading_total = []
-    no_reading_total = []
-    lpg_reading_total = []
+    co_reading_avg = []
+    no_reading_avg = []
+    lpg_reading_avg = []
 
     for analyser in analysers:
 
@@ -220,29 +274,52 @@ def chart_json_monthly(request):
 
             for date in dates:
                 readings = analyser.readings.filter(created_at__range=date)
-                co = 0
-                no = 0
-                lpg = 0
-                for reading in readings:
-                    co += reading.carbonmonoxide_sensor_reading
-                    no += reading.nitrogendioxide_sensor_reading
-                    lpg += reading.lpg_gas_sensor_reading
+            
+                co = readings.aggregate(Avg('carbonmonoxide_sensor_reading'))['carbonmonoxide_sensor_reading__avg']
+                no = readings.aggregate(Avg('nitrogendioxide_sensor_reading'))['nitrogendioxide_sensor_reading__avg']
+                lpg = readings.aggregate(Avg('lpg_gas_sensor_reading'))['lpg_gas_sensor_reading__avg']
 
                 co_reading.append(co)
                 no_reading.append(no)
                 lpg_reading.append(lpg)
-        co_reading_total.append(co_reading)
-        no_reading_total.append(no_reading)
-        lpg_reading_total.append(lpg_reading)
+
+        co_reading_avg.append(co_reading)
+        no_reading_avg.append(no_reading)
+        lpg_reading_avg.append(lpg_reading)
+
+    # remove None
+    corrected_co_avg = []
+    for avg in co_reading_avg:
+        corrected_co_avg.append(map(remove_none, avg))
+    _corrected_co_avg = zip(*corrected_co_avg)
+    avg_of_averages_co = []
+    for i in _corrected_co_avg:
+        avg_of_averages_co.append(float(sum(i))/len(i))
+
+    corrected_no_avg = []
+    for avg in no_reading_avg:
+        corrected_no_avg.append(map(remove_none, avg))
+    _corrected_no_avg = zip(*corrected_no_avg)
+    avg_of_averages_no = []
+    for i in _corrected_no_avg:
+        avg_of_averages_no.append(float(sum(i))/len(i))
 
 
-    corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
-    corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
-    corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
+    corrected_lpg_avg = []
+    for avg in lpg_reading_avg:
+        corrected_lpg_avg.append(map(remove_none, avg))
+    _corrected_lpg_avg = zip(*corrected_lpg_avg)
+    avg_of_averages_lpg = []
+    for i in _corrected_lpg_avg:
+        avg_of_averages_lpg.append(float(sum(i))/len(i))
 
-    data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
-                            {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
-                            {'name': 'LPG gas', 'data': corrected_lpg_reading}]
+
+
+    data_list = [
+        {'name': 'Carbonmonoxide', 'data': avg_of_averages_co },
+        {'name': 'Nitrogendioxide', 'data': avg_of_averages_no},
+        {'name': 'LPG gas', 'data': avg_of_averages_lpg}]
+
 
     months = ['Jan', 'feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     months_clean = [months[d_start.month-1] for d_start, d_end in dates]
@@ -324,9 +401,9 @@ def chart_json_station_m(request, pk):
     # dates = sorted(dates) # sort the months in ascending order
     dates.reverse()
 
-    co_reading_total = []
-    no_reading_total = []
-    lpg_reading_total = []
+    co_reading_avg = []
+    no_reading_avg = []
+    lpg_reading_avg = []
 
     for analyser in analysers:
 
@@ -337,29 +414,22 @@ def chart_json_station_m(request, pk):
 
             for date in dates:
                 readings = analyser.readings.filter(created_at__range=date)
-                co = 0
-                no = 0
-                lpg = 0
-                for reading in readings:
-                    co += reading.carbonmonoxide_sensor_reading
-                    no += reading.nitrogendioxide_sensor_reading
-                    lpg += reading.lpg_gas_sensor_reading
+
+                co = readings.aggregate(Avg('carbonmonoxide_sensor_reading'))['carbonmonoxide_sensor_reading__avg']
+                no = readings.aggregate(Avg('nitrogendioxide_sensor_reading'))['nitrogendioxide_sensor_reading__avg']
+                lpg = readings.aggregate(Avg('lpg_gas_sensor_reading'))['lpg_gas_sensor_reading__avg']
 
                 co_reading.append(co)
                 no_reading.append(no)
                 lpg_reading.append(lpg)
-        co_reading_total.append(co_reading)
-        no_reading_total.append(no_reading)
-        lpg_reading_total.append(lpg_reading)
+        co_reading_avg.append(co_reading)
+        no_reading_avg.append(no_reading)
+        lpg_reading_avg.append(lpg_reading)
 
-
-    corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
-    corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
-    corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
-
-    data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
-                            {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
-                            {'name': 'LPG gas', 'data': corrected_lpg_reading}]
+    data_list = [
+        {'name': 'Carbonmonoxide', 'data': map(remove_none, co_reading_avg[0]) },
+        {'name': 'Nitrogendioxide', 'data': map(remove_none, no_reading_avg[0])},
+        {'name': 'LPG gas', 'data': map(remove_none, lpg_reading_avg[0])}]
 
     months = ['Jan', 'feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     months_clean = [months[d_start.month-1] for d_start, d_end in dates]
@@ -390,10 +460,9 @@ def chart_json_station_w(request, pk):
 
     dates = sorted(dates) # sort the days in ascending order
 
-    # placeholder for accumulated readings (from database)
-    co_reading_total = []
-    no_reading_total = []
-    lpg_reading_total = []
+    co_reading_avg = []
+    no_reading_avg = []
+    lpg_reading_avg = []
 
     for analyser in analysers:
 
@@ -404,29 +473,22 @@ def chart_json_station_w(request, pk):
 
             for date in dates:
                 readings = analyser.readings.filter(created_at__range=date)
-                co = 0
-                no = 0
-                lpg = 0
-                for reading in readings:
-                    co += reading.carbonmonoxide_sensor_reading
-                    no += reading.nitrogendioxide_sensor_reading
-                    lpg += reading.lpg_gas_sensor_reading
+
+                co = readings.aggregate(Avg('carbonmonoxide_sensor_reading'))['carbonmonoxide_sensor_reading__avg']
+                no = readings.aggregate(Avg('nitrogendioxide_sensor_reading'))['nitrogendioxide_sensor_reading__avg']
+                lpg = readings.aggregate(Avg('lpg_gas_sensor_reading'))['lpg_gas_sensor_reading__avg']
 
                 co_reading.append(co)
                 no_reading.append(no)
                 lpg_reading.append(lpg)
-        co_reading_total.append(co_reading)
-        no_reading_total.append(no_reading)
-        lpg_reading_total.append(lpg_reading)
+        co_reading_avg.append(co_reading)
+        no_reading_avg.append(no_reading)
+        lpg_reading_avg.append(lpg_reading)
 
-
-    corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
-    corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
-    corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
-
-    data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
-                            {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
-                            {'name': 'LPG gas', 'data': corrected_lpg_reading}]
+    data_list = [
+        {'name': 'Carbonmonoxide', 'data': map(remove_none, co_reading_avg[0]) },
+        {'name': 'Nitrogendioxide', 'data': map(remove_none, no_reading_avg[0])},
+        {'name': 'LPG gas', 'data': map(remove_none, lpg_reading_avg[0])}]
 
     days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     dates_clean = [days[d_start.weekday()] for d_start, d_end in dates]
@@ -460,12 +522,9 @@ def chart_json_station_d(request, pk):
 
     dates.reverse() # sort the hours in ascending order
 
-   
-
-    # placeholder for accumulated readings (from database)
-    co_reading_total = []
-    no_reading_total = []
-    lpg_reading_total = []
+    co_reading_avg = []
+    no_reading_avg = []
+    lpg_reading_avg = []
 
     for analyser in analysers:
 
@@ -476,37 +535,28 @@ def chart_json_station_d(request, pk):
 
             for date in dates:
                 readings = analyser.readings.filter(created_at__range=date)
-                co = 0
-                no = 0
-                lpg = 0
-                for reading in readings:
-                    co += reading.carbonmonoxide_sensor_reading
-                    no += reading.nitrogendioxide_sensor_reading
-                    lpg += reading.lpg_gas_sensor_reading
+
+                co = readings.aggregate(Avg('carbonmonoxide_sensor_reading'))['carbonmonoxide_sensor_reading__avg']
+                no = readings.aggregate(Avg('nitrogendioxide_sensor_reading'))['nitrogendioxide_sensor_reading__avg']
+                lpg = readings.aggregate(Avg('lpg_gas_sensor_reading'))['lpg_gas_sensor_reading__avg']
 
                 co_reading.append(co)
                 no_reading.append(no)
                 lpg_reading.append(lpg)
-        co_reading_total.append(co_reading)
-        no_reading_total.append(no_reading)
-        lpg_reading_total.append(lpg_reading)
+        co_reading_avg.append(co_reading)
+        no_reading_avg.append(no_reading)
+        lpg_reading_avg.append(lpg_reading)
 
-
-    corrected_co_reading = [sum(a)/len(a) for a in zip(*co_reading_total)]
-    corrected_no_reading = [sum(a)/len(a) for a in zip(*no_reading_total)]
-    corrected_lpg_reading = [sum(a)/len(a) for a in zip(*lpg_reading_total)]
-
-    data_list = [{'name': 'Carbonmonoxide', 'data': corrected_co_reading},
-                            {'name': 'Nitrogendioxide', 'data': corrected_no_reading},
-                            {'name': 'LPG gas', 'data': corrected_lpg_reading}]
+    data_list = [
+        {'name': 'Carbonmonoxide', 'data': map(remove_none, co_reading_avg[0]) },
+        {'name': 'Nitrogendioxide', 'data': map(remove_none, no_reading_avg[0])},
+        {'name': 'LPG gas', 'data': map(remove_none, lpg_reading_avg[0])}]
 
     hours = map(sanitize_time, ["{0}00".format(i) for i in range(1,25)])
     hours_clean = [hours[d_start.hour] for d_start, d_end in dates]
     data_to_dump = {'payload': data_list, 'dates': hours_clean}
     data = json.dumps(data_to_dump)
-    return HttpResponse(data, mimetype='application/json')
-
-    
+    return HttpResponse(data, mimetype='application/json')    
 
 
 def station_detail(request, pk):
@@ -526,7 +576,8 @@ def station_detail(request, pk):
                 return redirect('station-detail', pk=station.pk)
             else:
                 return redirect('station-detail', pk=pk)
-    return render_to_response('hewa/station_detail.html', {'form': StationForm, 'readings': readings, 'object': station}, 
+    return render_to_response('hewa/station_detail.html', 
+        {'form': StationForm, 'readings': readings, 'object': station}, 
         RequestContext(request))
 
 
@@ -596,45 +647,30 @@ def export_pdf(request):
     response = HttpResponse(mimetype='application/pdf')
     response['Content-Disposition'] = "attachment; filename=export.pdf"
     buffer = BytesIO()
-    p = canvas.Canvas(buffer)
-    p.drawString(100, 100, 'Reading')
+    doc = SimpleDocTemplate(response)
+    
+    elements = []
 
-    # ws1.write(0, 0, 'Station Name')
-    # ws1.write(0, 1, 'Created at')
-    # ws1.write(0, 2, 'carbonmonoxide')
-    # ws1.write(0, 3, 'nitrogendioxide')
-    # ws1.write(0, 4, 'Lpg gas')
+    data = [['Station', 'Date', 
+        'Carbonmonoxide reading', 
+        'Nitrogendioxide gas reading', 
+        'LPG gas reading'],]
 
-    data = []
     for reading in AirQualityReading.objects.exclude(analyser=None):
         data.append(
-            (reading.analyser_set.values_list('station__station_name',flat=True)[0],
-            reading.created_at,
+            [reading.analyser_set.values_list('station__station_name',flat=True)[0],
+            reading.created_at.strftime('%d, %b %Y'),
             reading.carbonmonoxide_sensor_reading,
             reading.nitrogendioxide_sensor_reading,
-            reading.lpg_gas_sensor_reading))
+            reading.lpg_gas_sensor_reading])
 
-    for index, _row_data in enumerate(data):
-        # row = ws1.row(index+1)
-        print "Please get a pdf object here some how"
-        # e.g. p.drawString(), etc.
-        for i, _data in enumerate(_row_data):
-            if type(_data) == datetime.datetime:
-                print "replace this with the code to write to pdf"
-                # row.write(i, _data.strftime("%B %d, %Y"))
-            else:
-                print "replace this wit the code to write to a pdf"
-                # row.write(i, _data)
+    t=Table(data)
+    elements.append(t)
+    # write the document to disk
+    doc.build(elements)
 
-    p.showPage()
-    p.save()
-
-    # get the value of the BytesIO buffer and write to the response
-    pdf = buffer.getvalue()
-    buffer.close()
-    response.write(pdf)
-    return response
-
+    response.write(doc)
+    return response       
 
 #For exporting data for a particular station
 def export_station(request, pk):
@@ -679,6 +715,39 @@ def export_station(request, pk):
 
     w.save(response)
     return response
+
+def export_pdf_station(request, pk):
+    response = HttpResponse(mimetype='application/pdf')
+    response['Content-Disposition'] = "attachment; filename=export.pdf"
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(response)
+    
+    elements = []
+
+    data = [['Station', 'Date', 
+        'Carbonmonoxide reading', 
+        'Nitrogendioxide gas reading', 
+        'LPG gas reading'],]
+
+    station = get_object_or_404(Station, pk= pk)
+
+    for reading in station.analyser.readings.all():
+        data.append(
+            [reading.analyser_set.values_list('station__station_name',flat=True)[0],
+            reading.created_at.strftime('%d, %b %Y'),
+            reading.carbonmonoxide_sensor_reading,
+            reading.nitrogendioxide_sensor_reading,
+            reading.lpg_gas_sensor_reading])
+
+    t=Table(data)
+    elements.append(t)
+    # write the document to disk
+    doc.build(elements)
+
+    response.write(doc)
+    return response 
+
+
 
 
 @csrf_exempt

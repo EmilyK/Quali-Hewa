@@ -81,7 +81,7 @@
 				<div class="navbar-collapse navbar-ex1-collapse collapse">
 					<ul class="nav navbar-nav navbar-right main-navigation">
 						<li class=""><a class="" href="#getting-started">About</a></li>
-						<li><a id="header-nav-button" class="btn btn-sm" href="{% url 'admin:index' %}">Login <i class='ion-log-in'></i></a></li>
+						<li><a id="header-nav-button" class="btn btn-sm" href="{% url 'admin:index' %}">Login </a></li>
 					</ul>
 				</div>
 			</div>
@@ -98,7 +98,7 @@
 							<p class="subheading">Transform your local area and control air polltion</p>
 							<div class="buttons">
 								<a href="{% url 'dashboard' %}" class="btn btn-default btn-lg standard-button">View Data from all stations</a> 
-								<a href="{% url 'stations' %}" class="scroll btn btn-lg btn-danger alternate-button">View Stations</a>		
+								<a href="{% url 'stations' %}" class="scroll btn btn-lg btn-danger alternate-button">View Data for specific stations</a>		
 							</div>
 						</div>				
 					</div>
@@ -176,52 +176,6 @@
 
 
 <!-- =========================
-	BRIEF LEFT SECTION 
-============================== -->
-<section class="app-brief custom-section-1 section-wrapper">
-	<div class="container">
-		
-		<div class="row">
-			
-			<!-- PHONES IMAGE -->
-			<div class="col-md-6 col-sm-6 wow fadeInRight animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-				<div class="phone-image">
-					<img src="{% static 'images/landingpage/mockup1.png' %}" alt="">
-				</div>
-			</div>
-			
-			<!-- RIGHT SIDE WITH BRIEF -->
-			<div class="col-md-6 col-sm-6 left-align wow fadeInLeft animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-				
-				<!-- SECTION TITLE -->
-				<h2 class="dark-text">Introducing our new product</h2>
-				
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-				</p>
-				
-				<!-- FEATURE LIST -->
-				<ul class="feature-list colored-border">
-					<li><i class="ion-ios7-bell-outline"></i>Reliable and Secure Platform</li>
-					<li><i class="ion-ios7-clock-outline"></i>Everything is perfectly orgainized for future</li>
-					<li><i class="ion-ios7-browsers-outline"></i>Attach large file easily</li>
-					<li><i class="ion-ios7-briefcase-outline"></i>Tons of features and easy to use and customize</li>
-				</ul>
-				
-
-				<a href="{% url 'stations' %}" class="scroll btn btn-lg standard-button">Learn More</a>
-			</div>
-			<!-- /END RIGHT BRIEF -->
-			
-		</div>
-		<!-- /END ROW -->
-	</div>
-	<!-- /END CONTAINER -->
-</section>
-<!-- /END SECTION -->
-
-
-<!-- =========================
 	BRIEF RIGHT SECTION 
 ============================== -->
 <section class="app-brief custom-bg custom-section-2 section-wrapper">
@@ -246,124 +200,13 @@
 				
 				<a href="#" class="scroll btn btn-lg alternate-button">Learn More</a>
 			</div>
-			<!-- /ENDBRIEF -->
-			
-			<!-- PHONES IMAGE -->
-			<div class="col-md-6 col-sm-6 wow fadeInRight animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-				<div class="phone-image">
-					<img src="{% static 'images/landingpage/mockup2.png' %}" alt="">
-				</div>
-			</div>
-			<!-- /END PHONES IMAGE -->
-			
+			<!-- /ENDBRIEF -->		
 		</div>
 		<!-- /END ROW -->
 	</div>
 	<!-- /END CONTAINER -->
 </section>
 <!-- /END SECTION -->
-
-
-<!-- =========================
-	TESTIMONIALS 
-============================== -->
-<section class="testimonials section-wrapper">		
-	<div class="container wow fadeIn animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-
-		<!-- SECTION HEADER -->
-		<div class="section-header wow fadeIn animated animated" data-wow-offset="120" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-			
-			<!-- SECTION TITLE -->
-			<h2 class="dark-text">See what our customers had to say</h2>
-
-			<div class="section-description">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam suscipit aliquet felis, quis ultrices orci condiment. Suspendisse ut eleifend sem, nec iaculis nulla.
-			</div>
-
-			<img alt="Companies-badge" class="company-logos" src="{% static 'images/landingpage/client-logos.png' %}">
-			
-		</div>
-
-		<!-- FEEDBACKS -->
-		<div id="feedbacks" class="owl-carousel owl-theme" style="display: block; opacity: 1;">
-			
-			<!-- SINGLE FEEDBACK -->
-			<div class="owl-wrapper-outer"><div class="owl-wrapper" style="width: 6840px; left: 0px; display: block; transition: all 400ms ease; -webkit-transition: all 400ms ease; -webkit-transform: translate3d(-1140px, 0px, 0px);"><div class="owl-item" style="width: 1140px;"><div class="feedback">
-				
-				<div class="quote">
-					<div class="message">
-						Mobility will dramatically change the way you build landing pages. We thank you for developing this template.
-					</div>
-				</div>	
-
-				<!-- IMAGE -->
-				<div class="image">
-					<!-- i class=" icon_quotations"></i -->
-					<img src="{% static 'images/landingpage/client1.jpg' %}" alt="">
-				</div>
-				
-				<!-- INFORMATION -->
-				<div class="name">
-					Michael Smith
-				</div>
-				<div class="company-info">
-					CEO, Fictional Company LLC
-				</div>		
-			</div></div><div class="owl-item" style="width: 1140px;"><div class="feedback">
-				
-				<div class="quote">
-					<div class="message">
-						Nulla fastidii ea his, duo <strong>modus molestie</strong> ei, scripta aperiri mel ex. Ex qui graecis ceteros. <strong>Noster tamquam</strong> eu pri. Feugiat impedit in vim, nec te unum omnium expetenda.
-					</div>
-				</div>	
-
-				<!-- IMAGE -->
-				<div class="image">
-					<!-- i class=" icon_quotations"></i -->
-					<img src="{% static 'images/landingpage/client2.jpg' %}" alt="">
-				</div>
-				
-				<!-- INFORMATION -->
-				<div class="name">
-					John Williams
-				</div>
-				<div class="company-info">
-					Co-Founder, Fictional Company LLC
-				</div>		
-			</div></div><div class="owl-item" style="width: 1140px;"><div class="feedback">
-				
-				<div class="quote">
-					<div class="message">Mobility will dramatically change the way you build landing pages. It's so easy to use and has great documentation. 
-					</div>
-				</div>	
-
-				<!-- IMAGE -->
-				<div class="image">
-					<!-- i class=" icon_quotations"></i -->
-					<img src="{% static 'images/landingpage/client3.jpg' %}" alt="">
-				</div>
-				
-				<!-- INFORMATION -->
-				<div class="name">
-					Steve Jacobs
-				</div>
-				<div class="company-info">
-					Marketing Officer, Fictional Company LLC
-				</div>		
-			</div></div></div></div>
-			
-			<!-- SINGLE FEEDBACK -->
-			
-
-			<!-- SINGLE FEEDBACK -->
-			
-			
-			
-		<div class="owl-controls clickable"><div class="owl-pagination"><div class="owl-page"><span class=""></span></div><div class="owl-page active"><span class=""></span></div><div class="owl-page"><span class=""></span></div></div></div></div>
-		<!-- /END FEEDBACKS -->
-		
-	</div>
-</section>
 
 
 <!-- =========================
@@ -480,132 +323,6 @@
 <!-- /END SCREENSHOTS SECTION -->
 
 
-<!-- =========================
-	PRICING
-============================== -->
-<section id="pricing" class="section-wrapper">
-	<div class="container">
-		<!-- SECTION HEADER -->
-		<div class="section-header wow fadeIn animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-			
-			<!-- SECTION TITLE -->
-			<h2 class="dark-text">Simple pricing. Pay as you grow.</h2>
-			
-			
-			<div class="section-description">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam suscipit aliquet felis, quis ultrices orci condiment. Suspendisse ut eleifend sem, nec iaculis nulla.
-			</div>
-			
-			
-		</div>
-		<!-- /END SECTION HEADER -->
-
-		<div class="pricing-item-section-wrapper">
-			<div class="row">
-
-				<!-- BASIC -->
-				<div class="col-md-4 col-sm-4">
-					<div class="pricing-item-section-basic pricing-item-section pricing-item-section-machine wow fadeInLeft animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-						<h3>Basic</h3>
-						<div class="pricing-item-price-note">Basic starting kit.</div>
-
-						<div class="pricing-item-price">
-							<span class="pricing-item-price-amount">29</span><span class="pricing-item-price-unit">$</span> <span class="pricing-item-price-frequency">/ month</span>
-						</div>
-
-						<ul class="pricing-item-feature-items">
-							<li class="pricing-item-feature-item">
-								<i class="ion-android-checkmark"></i>
-								<p class="pricing-item-feature-title">Free Setup</p>
-								<p class="pricing-item-feature-description">Lorem ipsum dolor sit amet, consectetur.</p>
-							</li>
-
-							<li class="pricing-item-feature-item">
-								<i class="ion-android-checkmark"></i>
-								<p class="pricing-item-feature-title">10 GB</p>
-								<p class="pricing-item-feature-description">Lorem ipsum dolor sit amet, consectetur.</p>
-							</li>
-
-							<li class="pricing-item-feature-item">
-								<i class="ion-android-checkmark"></i>
-								<p class="pricing-item-feature-title">1TB transfer rate</p>
-								<p class="pricing-item-feature-description">Lorem ipsum dolor sit amet, consectetur.</p>
-							</li>
-						</ul>
-					</div>
-				</div>
-
-				<!-- PROFESSIONAL -->
-				<div class="col-md-4 col-sm-4">
-					<div class="pricing-item-section-pro pricing-item-section pricing-item-section-machine wow bounceIn animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-						<h3>Professional</h3>
-						<div class="pricing-item-price-note">Our most popular plan.</div>
-
-						<div class="pricing-item-price">
-							<span class="pricing-item-price-amount">59</span><span class="pricing-item-price-unit">$</span> <span class="pricing-item-price-frequency">/ month</span>
-						</div>
-
-						<ul class="pricing-item-feature-items">
-							<li class="pricing-item-feature-item">
-								<i class="ion-android-checkmark"></i>
-								<p class="pricing-item-feature-title">Free Setup</p>
-								<p class="pricing-item-feature-description">Lorem ipsum dolor sit amet, consectetur.</p>
-							</li>
-
-							<li class="pricing-item-feature-item">
-								<i class="ion-android-checkmark"></i>
-								<p class="pricing-item-feature-title">50 GB</p>
-								<p class="pricing-item-feature-description">Lorem ipsum dolor sit amet, consectetur.</p>
-							</li>
-
-							<li class="pricing-item-feature-item">
-								<i class="ion-android-checkmark"></i>
-								<p class="pricing-item-feature-title">2TB transfer rate</p>
-								<p class="pricing-item-feature-description">Lorem ipsum dolor sit amet, consectetur.</p>
-							</li>
-						</ul>
-					</div>
-				</div>
-
-				<!-- ENTERPRISE -->
-				<div class="col-md-4 col-sm-4">
-					<div class="pricing-item-section-enterprise pricing-item-section pricing-item-section-machine wow fadeInRight animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-						<h3>Enterprise</h3>
-						<div class="pricing-item-price-note">Scalability and Efficiency.</div>
-
-						<div class="pricing-item-price">
-							<span class="pricing-item-price-amount">99</span><span class="pricing-item-price-unit">$</span> <span class="pricing-item-price-frequency">/ month</span>
-						</div>
-
-						<ul class="pricing-item-feature-items">
-							<li class="pricing-item-feature-item">
-								<i class="ion-android-checkmark"></i>
-								<p class="pricing-item-feature-title">Free Setup</p>
-								<p class="pricing-item-feature-description">Lorem ipsum dolor sit amet, consectetur.</p>
-							</li>
-
-							<li class="pricing-item-feature-item">
-								<i class="ion-android-checkmark"></i>
-								<p class="pricing-item-feature-title">550 GB</p>
-								<p class="pricing-item-feature-description">Lorem ipsum dolor sit amet, consectetur.</p>
-							</li>
-
-							<li class="pricing-item-feature-item">
-								<i class="ion-android-checkmark"></i>
-								<p class="pricing-item-feature-title">100TB transfer rate</p>
-								<p class="pricing-item-feature-description">Lorem ipsum dolor sit amet, consectetur.</p>
-							</li>
-						</ul>
-					</div>
-				</div>
-
-			</div>
-        </div>
-
-	</div>
-</section>
-
-
 
 <!-- =========================
 	FOOTER 
@@ -679,8 +396,7 @@
 <script src="{% static 'js/landingpage/retina-1.1.0.min.js'%}"></script>
 <script src="{% static 'js/landingpage/jquery.nav.js'%}"></script>
 <script src="{% static 'js/landingpage/matchMedia.js'%}"></script>
-<script src="{% static 'js/landingpage/jquery.ajaxchimp.min.js'%}"></script>
-<script src="{ static 'js/landingpage/main.js'%}"></script>
+<script src="{% static 'js/landingpage/main.js'%}"></script>
 
 <!-- Theme Panel JS -->
 <script type="text/javascript" src="{% static 'js/landingpage/panel.js' %}">

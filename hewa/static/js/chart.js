@@ -5,7 +5,7 @@ $(function(){
         var selectedBox = $('#selectBox')[0];
         var selectedValue = selectBox.options[selectBox.selectedIndex].value;
         if (selectedValue === 'monthly'){
-            generateChart('/chart-data/monthly', 'Monthly Average readings from all stations');
+            generateChart('/chart-data/monthly', 'Average Monthly readings from all stations');
         }else if (selectedValue === 'daily'){
             generateChart('/chart-data/daily', 'Daily Average readings from all stations');
         }else{
