@@ -1,3 +1,4 @@
+#create your views here
 from django.shortcuts import render, get_object_or_404, RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,9 +11,6 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 import datetime
 from dateutil.relativedelta import relativedelta
 from django.db.models import Avg
-
-
-# Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect
 from django_tables2 import RequestConfig
@@ -25,6 +23,9 @@ from django.views.generic import ListView
 
 def about(request):
     return render_to_response('hewa/about.html', {}, RequestContext(request))
+
+def team(request):
+    return render_to_response('hewa/team.html', {}, RequestContext(request))
 
 def home(request):
     return render_to_response('hewa/home.html', {}, RequestContext(request))

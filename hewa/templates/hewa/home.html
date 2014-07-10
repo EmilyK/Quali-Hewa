@@ -36,7 +36,14 @@
 <!-- CUSTOM STYLESHEETS -->
 <link rel="stylesheet" href="{%static 'css/landingpage/style3.css'%}">
 <link rel="stylesheet" href="{%static 'css/landingpage/responsive.css'%}">
+<link rel="stylesheet" href="{%static 'css/ekko-lightbox.min.css'%}">
 
+<style>
+	img.top {vertical-align:text-top;}
+	img.bottom {vertical-align:text-bottom;}
+	img.right { vertical-align: text-right;}
+	img.left { vertical-align: text-left; }
+</style>
 
 <!-- SITE COLOR -->
 <link id="changeable-colors" rel="stylesheet" href="{%static 'css/landingpage/blue.css'%}">
@@ -94,10 +101,10 @@
 				<div class="centered-display">
 					<div class="header-content">
 						<div class="centered-content">
-							<h1>Read Air pollution data for different areas</h1>
-							<p class="subheading">Transform your local area and control air polltion</p>
+							<h1>View Air pollution data for different areas</h1>
+							<p class="subheading">Control air pollution and save lives</p>
 							<div class="buttons">
-								<a href="{% url 'dashboard' %}" class="btn btn-default btn-lg standard-button">View Data from all stations</a> 
+								<a href="{% url 'dashboard' %}" class="btn btn-default btn-lg standard-button">View Data for all stations</a> 
 								<a href="{% url 'stations' %}" class="scroll btn btn-lg btn-danger alternate-button">View Data for specific stations</a>		
 							</div>
 						</div>				
@@ -121,206 +128,70 @@
 		<div class="section-header wow fadeIn animated animated" data-wow-offset="120" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
 			
 			<!-- SECTION TITLE -->
-			<h2 class="dark-text">Getting Started</h2>
+			<h2 class="dark-text">What is QualiHewa all about?</h2>
 
 			<div class="section-description">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam suscipit aliquet felis, quis ultrices orci condiment. Suspendisse ut eleifend sem, nec iaculis nulla.
+				QualiHewa is a system that enables the monitoring of levels of air pollution in communities. Quali is derived from Quality. Hewa is a Swahili word for Air. Air Quality is what we aim to determine. A custom built air quality detector called The QualiHewa Analyser takes readings of different pollutants from the air and sends them to this platform. The data here is aggregated from different QualiHewa Analysers and presented in a simple and meaningful way. That is; inform of tables and charts. What you choose to do with this data is all up to you. We have provided a way for you to export this data and use it for different purposes. You can choose to view data for all stations or specific stations. A station is a place with a QualiHewa analyser.
+
+				
+
+
 			</div>
 			
 		</div>
 
 		<div class="row infographic">
 			<div class="col-md-6 col-sm-6">
-				<img src="{% static 'images/landingpage/icon1.png' %}" alt="" class="image-section image-on-left wow pulse animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">				    
+			<p> 
+					
+					
+				<img src="{% static 'images/landingpage/r1.jpg' %}" height="400" width="500" alt="" class="image-section image-on-left wow pulse animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
+
+				</p>
 			</div>
 
 			<div class="col-md-6 col-sm-6">
 				<div class="details wow fadeInRight animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-					<h3>100% Responsive</h3>
-		    		<p>Nulla fastidii ea his, duo <strong>modus molestie</strong> ei, scripta aperiri mel ex. Ex qui graecis ceteros. <strong>Noster tamquam</strong> eu pri. Feugiat impedit in vim, nec te unum omnium expetenda.</p>
-		    		<a href="#" class="callout-link">Sign up to get started <i class="ion-arrow-right-c"></i></a>
+					<h3>Brief Background</h3>
+		    		<p>
+		    		One of the major public health and environmental concerns today is pollution. Air pollution is the introduction into the atmosphere of chemicals or biological materials that cause discomfort, disease, or death to humans, damage other living organisms such as food crops, or damage the natural environment or built environment.
+					Air pollution has very adverse effects. According to the World Health Orgganisation, it is estimated that 3.5 million premature deaths occur every year due to household air pollution, and 3.3 million deaths due to outdoor air pollution.  
+					Pollution is rampant especially in urban areas of Uganda with cars and factories contributing to the high levels of pollution. As a result, it becomes essential to monitor the air for exceeding levels of pollutants such as Carbon Monoxide (CO), Sulphur Dioxide (SO2), Nitrogen Dioxide (NO2) so that appropriate actions can be taken. 
+					With this endeavor, we proposed the QualiHewa air pollution monitoring system that helps the society to monitor the levels of air pollution in the country. Personal air pollution monitoring stations owned by citizens across a location could create awareness about the composition of the air around them.
+
+		    		</p>
+
+		    		
 				</div>				
 			</div>
 		</div>
 
-		<div class="row infographic">
-			<div class="col-md-6 col-sm-6 col-md-push-6 col-sm-push-6">
-				<img src="{% static 'images/landingpage/icon2.png' %}" alt="" class="image-section image-on-right wow pulse animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">						    
+		<div>
+			<div class="col-md-6 col-sm-6 col-md-push-5 col-sm-push-5">
+				<img src="{% static 'images/landingpage/r3.jpg' %}" alt="" class="image-section image-on-right wow pulse animated animated img-responsive" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
+
 			</div>
 
-			<div class="col-md-6 col-sm-6 col-md-pull-6 col-sm-pull-6">
+			<div class="col-md-6 col-sm-6 col-md-pull-7 col-sm-pull-7">
 				<div class="details wow fadeInLeft animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-					<h3>Built with Bootstrap</h3>
-		    		<p>Nulla fastidii ea his, duo <strong>modus molestie</strong> ei, scripta aperiri mel ex. Ex qui graecis ceteros. <strong>Noster tamquam</strong> eu pri. Feugiat impedit in vim, nec te unum omnium expetenda.</p>
-		    		<a href="#" class="callout-link">Sign up to get started <i class="ion-arrow-right-c"></i></a>
+					
+					<img src="{% static 'images/landingpage/poll.jpg' %}" alt="" class="bottom"> <br/>
+					City with high pollution levels. Kampalais a typical example of such places. A lot smog can be seen in the air and this is mainly due to the high level of pollutants that are released into the air.
+					<hr>
+				
+					</p>		
+				
+				<img src="{% static 'images/landingpage/r4.jpg' %}" alt="" class="image-section image-on-right wow pulse animated animated img-responsive" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;" width="400" height="500">	
+
+				Above and on the right are some screen shots of the Qualihewa hardware. It is an integrated circuit made of the rspberry pi and air sensors.				
 				</div>
 			</div>
 		</div>
-
-		<div class="row infographic">
-			<div class="col-md-6 col-sm-6">
-			    <img src="{% static 'images/landingpage/icon3.png' %}" alt="" class="image-section image-on-left wow pulse animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">		
-			</div>
-
-			<div class="col-md-6 col-sm-6">					
-				<div class="details wow fadeInRight animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-					<h3>Customer Support</h3>
-		    		<p>Nulla fastidii ea his, duo <strong>modus molestie</strong> ei, scripta aperiri mel ex. Ex qui graecis ceteros. <strong>Noster tamquam</strong> eu pri. Feugiat impedit in vim, nec te unum omnium expetenda.</p>
-		    		<a href="#" class="callout-link">Sign up to get started <i class="ion-arrow-right-c"></i></a>
-				</div>
-			</div>
+			
 		</div>
 	
 	</div>
 </section>
-
-
-<!-- =========================
-	BRIEF RIGHT SECTION 
-============================== -->
-<section class="app-brief custom-bg custom-section-2 section-wrapper">
-	<div class="container">
-		
-		<div class="row">
-			
-			<!-- BRIEF -->
-			<div class="col-md-6 wow col-sm-6 fadeInLeft animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-				
-				<!-- SECTION TITLE -->
-				<h2 class="white-text">Packed with great features</h2>
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-				</p>
-				<ul class="feature-list light-border">    
-	                <li><i class="ion-ios7-bell-outline"></i>Well customizabile</li>
-	                <li><i class="ion-ios7-clock-outline"></i>Responsive theme</li>
-	                <li><i class="ion-ios7-browsers-outline"></i>User-friendly interface</li>
-	                <li><i class="ion-ios7-briefcase-outline"></i>Unlimited possibilities</li>
-	            </ul>
-				
-				<a href="#" class="scroll btn btn-lg alternate-button">Learn More</a>
-			</div>
-			<!-- /ENDBRIEF -->		
-		</div>
-		<!-- /END ROW -->
-	</div>
-	<!-- /END CONTAINER -->
-</section>
-<!-- /END SECTION -->
-
-
-<!-- =========================
-	SERVICES
-============================== -->
-<section class="services grey-bg section-wrapper" id="services">
-	<div class="container">
-		
-		<!-- SECTION HEADER -->
-		<div class="section-header wow fadeIn animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-			
-			<!-- SECTION TITLE -->
-			<h2 class="dark-text">Extended Features</h2>
-			
-			
-			<div class="section-description">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam suscipit aliquet felis, quis ultrices orci condiment. Suspendisse ut eleifend sem, nec iaculis nulla.
-			</div>
-			
-			
-		</div>
-		<!-- /END SECTION HEADER -->
-		
-		<div class="row">
-			
-			<!-- SINGLE SERVICE -->
-			<div class="col-md-4 col-sm-4 single-service wow fadeIn animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-				
-				<!-- SERVICE ICON -->
-				<div class="service-icon">
-					<i class="ion-ios7-cloud-upload-outline"></i>
-				</div>
-				
-				<!-- SERVICE HEADING -->
-				<h3>Data Recovery</h3>
-				
-				<!-- SERVICE DESCRIPTION -->
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam suscipit aliquet felis, quis ultrices orci condiment. Suspendisse ut eleifend sem, nec iaculis nulla.
-				</p>
-				
-			</div>
-			<!-- /END SINGLE SERVICE -->
-			
-			<!-- SINGLE SERVICE -->
-			<div class="col-md-4 col-sm-4 single-service wow fadeIn animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-				
-				<!-- SERVICE ICON -->
-				<div class="service-icon">
-					<i class="ion-ios7-alarm-outline"></i>
-				</div>
-				
-				<!-- SERVICE HEADING -->
-				<h3>Timed Notifications</h3>
-				
-				<!-- SERVICE DESCRIPTION -->
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam suscipit aliquet felis, quis ultrices orci condiment. Suspendisse ut eleifend sem, nec iaculis nulla.
-				</p>
-				
-			</div>
-			<!-- /END SINGLE SERVICE -->
-			
-			<!-- SINGLE SERVICE -->
-			<div class="col-md-4 col-sm-4 single-service wow fadeIn animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-				
-				<!-- SERVICE ICON -->
-				<div class="service-icon">
-					<i class="ion-ios7-bolt-outline"></i>
-				</div>
-				
-				<!-- SERVICE HEADING -->
-				<h3>Power Performance</h3>
-				
-				<!-- SERVICE DESCRIPTION -->
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam suscipit aliquet felis, quis ultrices orci condiment. Suspendisse ut eleifend sem, nec iaculis nulla.
-				</p>
-				
-			</div>
-			<!-- /END SINGLE SERVICE -->
-			
-		</div>
-		<!-- /END ROW -->
-	</div>
-	<!-- /END CONTAINER -->
-</section>
-<!-- /END FEATURES SECTION -->
-
-
-<!-- =========================
-	SCREENSHOTS
-============================== -->
-<section class="screenshots section-wrapper" id="screenshot-section">
-	<div class="container">
-		
-		<!-- SECTION HEADER -->
-		<div class="section-header wow fadeIn animated animated" data-wow-offset="10" data-wow-duration="1.5s" style="visibility: visible;-webkit-animation-duration: 1.5s; -moz-animation-duration: 1.5s; animation-duration: 1.5s;">
-			
-			<!-- SECTION TITLE -->
-			<h2 class="dark-text">Screenshots</h2>
-			
-			
-			<div class="section-description">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam suscipit aliquet felis, quis ultrices orci condiment. Suspendisse ut eleifend sem, nec iaculis nulla.
-			</div>
-			
-			
-		</div>
-		<!-- /END SECTION HEADER -->
-	</div>
-	<!-- /END CONTAINER -->
-</section>
-<!-- /END SCREENSHOTS SECTION -->
 
 
 
@@ -334,7 +205,7 @@
 
 			<div class="col-md-4 col-sm-4 company">
 				QualiHewa
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam suscipit aliquet felis, quis ultrices orci condiment. Suspendisse ut eleifend sem, nec iaculis nulla.</p>
+				<p>Control air pollution, save health issues</p>
 
 				<!-- COPYRIGHT TEXT -->
 				<p class="copyright">&copy; 2014 QualiHewa</p>
@@ -346,10 +217,8 @@
 	            <li class="heading">
 	             →
 	            </li>
-	            <li><a href="#">Our Team</a></li>
-	            <li><a href="#">Our Blog</a></li>
-	            <li><a href="#">Privacy Policy</a></li>
-	            <li><a href="#">Terms &amp; Conditions</a></li>
+	            <li><a href="{% url 'team' %}">Our Team</a></li>
+	           
 	          </ul>
 	        </div>
 
@@ -359,14 +228,13 @@
 	              Get in touch →
 	            </li>
 	            <li><a href="http://demo.cheriomedia.com/support">Contact Us</a></li>
-	            <li><a href="mailto:ekar45@gmail.com">ekar45{at}gmail.com</a></li>
+	            <li><a href="mailto:ekar45@gmail.com">ekar45@gmail.com</a></li>
 	          </ul>
 
           		<!-- SOCIAL ICONS -->
 				<ul class="social-icons">
 					<li><a href=""><i class="ion-social-facebook"></i></a></li>
 					<li><a href=""><i class="ion-social-twitter"></i></a></li>
-					<li><a href=""><i class="ion-social-pinterest"></i></a></li>
 					<li><a href=""><i class="ion-icon-social-google-plus"></i></a></li>
 				</ul>
 
@@ -397,6 +265,7 @@
 <script src="{% static 'js/landingpage/jquery.nav.js'%}"></script>
 <script src="{% static 'js/landingpage/matchMedia.js'%}"></script>
 <script src="{% static 'js/landingpage/main.js'%}"></script>
+<script src="{% static 'js/landingpage/ekko-lightbox.min.js'%}"></script>
 
 <!-- Theme Panel JS -->
 <script type="text/javascript" src="{% static 'js/landingpage/panel.js' %}">

@@ -14,6 +14,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
  	url(r'^$',views.home, name = 'index'),
     url(r'^dashboard/$',views.dashboard, name = 'dashboard'),
+     url(r'^team/$',views.team, name = 'team'),
     url(r'^stations/$',views.station_list, name = 'stations'),
     url(r'^stations/(?P<pk>\d+)/$', views.station_detail, name='station-detail'),
     url(r'^chart-data/$',views.chart_json, name = 'chart-data-all'),
