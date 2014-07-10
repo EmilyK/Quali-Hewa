@@ -79,7 +79,7 @@ Deploying this project
 1) Cd into the project
 
 ```console
-cd Quali-Hewa/hewa/
+cd Quali-Hewa/quali/
 ```
 
 2) make a copy of localsettings.py.example
