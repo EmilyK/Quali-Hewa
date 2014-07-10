@@ -1,8 +1,6 @@
 /* function to generate chart */
 function generateChart(url, title, tooltip){
-    console.log(url);
     $.getJSON(url, function(data){
-        console.log(data);
         $('#container').highcharts({
             title: {
                 text: title,
