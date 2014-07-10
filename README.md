@@ -87,7 +87,8 @@ cd Quali-Hewa/quali/
 ```
 cp localsettings.py.example localsettings.py
 ```
-
+In this case, all this is done in the `quali` folder.
+ 
 3) Edit the `localsettings.py` file in production or development with your database settings such as passwords or usernames or even other database systems. In the server, you edit this with either `vim` or `nano`
 
 4) Install project dependency
