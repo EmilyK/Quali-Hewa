@@ -76,16 +76,21 @@ other_station.analyser.readings.all()
 
 Deploying this project
 ======================
+1) Cd into the project
 
-1) make a copy of localsettings.py.example
+```console
+cd Quali-Hewa/hewa/
+```
+
+2) make a copy of localsettings.py.example
 
 ```
 cp localsettings.py.example localsettings.py
 ```
 
-2) Edit the `localsettings.py` file in production or development with your database settings such as passwords or usernames or even other database systems.
+3) Edit the `localsettings.py` file in production or development with your database settings such as passwords or usernames or even other database systems. In the server, you edit this with either `vim` or `nano`
 
-3) Install project dependency
+4) Install project dependency
 
 ```
 pip install -U -r requirements.txt
@@ -94,3 +99,5 @@ pip install -U -r requirements.txt
 Reference: http://www.jeffknupp.com/blog/2013/12/18/starting-a-django-16-project-the-right-way/
 
 Installing `ReportLab` on windows (binaries): http://www.lfd.uci.edu/~gohlke/pythonlibs/
+
+5) Restart web server
