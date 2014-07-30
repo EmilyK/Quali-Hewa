@@ -20,7 +20,7 @@ function generateChart(url, title, tooltip){
                 plotLines: [{
                 color: '#FFFF00',
                 width: 2,
-                value: 30,
+                value: 1000,
                 label: {text: "lpg gas limit at 30pmm"}
                 }, {
                 color: 'red',
