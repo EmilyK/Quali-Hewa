@@ -1,5 +1,5 @@
 #create your views here
-from django.shortcuts import render, get_object_or_404, RequestContext
+from django.shortcuts import render, get_object_or_404, RequestContext #functions for diplaying templates
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import simplejson as json
@@ -53,13 +53,14 @@ def dashboard(request):
         readings = []
         for analyser in analysers:
             if analyser.readings.exists():
-                latest_reading = analyser.readings.all() #.latest('created_at')
+                latest_reading = analyser.readings.order_by('-created_at') #.latest('created_at')
                 for reading in latest_reading:
                     readings.append((analyser.station_set.latest('station_name'),
                         reading.carbonmonoxide_sensor_reading,
                         reading.nitrogendioxide_sensor_reading,
                         reading.lpg_gas_sensor_reading,
                         reading.created_at))
+
         return render_to_response('hewa/dashboard.html', {'form': form, 'stations': Station.objects.all(), 
             'readings': readings}, RequestContext(request))
 
@@ -253,14 +254,12 @@ def chart_json_monthly(request):
     dates = []
     now = datetime.datetime.now()
 
-    for i in range(12):
-        dates.append(
-            (now+relativedelta(months=-i, days=0, hours=0),#beginning of the month
-            now+relativedelta(months=-i, days=30, hours=24),#end of the month
-            ))
+    for i in range(-1, 11):
+        last_day = now + relativedelta(day=1, months=-i, days=-1, hours=0) #beginning of the month
+        first_day = last_day + relativedelta(day=1) #end of the month
+        dates.append((first_day, last_day,))
 
     dates = sorted(dates) # sort the months in ascending order
-
 
     co_reading_avg = []
     no_reading_avg = []
@@ -274,7 +273,7 @@ def chart_json_monthly(request):
         if analyser.readings.exists():
 
             for date in dates:
-                readings = analyser.readings.filter(created_at__range=date)
+                readings = analyser.readings.filter(created_at__range=list(date))
             
                 co = readings.aggregate(Avg('carbonmonoxide_sensor_reading'))['carbonmonoxide_sensor_reading__avg']
                 no = readings.aggregate(Avg('nitrogendioxide_sensor_reading'))['nitrogendioxide_sensor_reading__avg']
@@ -313,8 +312,6 @@ def chart_json_monthly(request):
     avg_of_averages_lpg = []
     for i in _corrected_lpg_avg:
         avg_of_averages_lpg.append(float(sum(i))/len(i))
-
-
 
     data_list = [
         {'name': 'Carbonmonoxide', 'data': avg_of_averages_co },
@@ -393,11 +390,10 @@ def chart_json_station_m(request, pk):
     dates = []
     now = datetime.datetime.now()
 
-    for i in range(12):
-        dates.append(
-            (now+relativedelta(months=-i, days=0, hours=0),#beginning of the month
-            now+relativedelta(months=-i, days=30, hours=24),#end of the month
-            ))
+    for i in range(-1, 11):
+        last_day = now + relativedelta(day=1, months=-i, days=-1, hours=0) #beginning of the month
+        first_day = last_day + relativedelta(day=1) #end of the month
+        dates.append((first_day, last_day,))
 
     # dates = sorted(dates) # sort the months in ascending order
     dates.reverse()
@@ -563,7 +559,7 @@ def chart_json_station_d(request, pk):
 def station_detail(request, pk):
     station = get_object_or_404(Station, pk=pk)
     form = StationForm()
-    readings = station.analyser.readings.all()
+    readings = station.analyser.readings.order_by('-created_at')
 
 
     if request.method == 'POST':
@@ -747,8 +743,6 @@ def export_pdf_station(request, pk):
 
     response.write(doc)
     return response 
-
-
 
 
 @csrf_exempt
