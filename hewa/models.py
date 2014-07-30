@@ -50,6 +50,7 @@ class Analyser(models.Model):
     readings = models.ManyToManyField(AirQualityReading, blank=True)
     registered_at = models.DateTimeField(auto_now=True, default=datetime.datetime.today())
 
+    #sets text reference for each record
     def __unicode__(self):
         if self.station_set.exists():
             # does this analyser belong to a station?
