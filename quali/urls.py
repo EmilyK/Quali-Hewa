@@ -11,6 +11,7 @@ admin.autodiscover()
 # v1_api.register(AnalyserResource())
 # v1_api.register(AirQualityReadingResource())
 
+#set url patterns 
 urlpatterns = patterns('',
  	url(r'^$',views.home, name = 'index'),
     url(r'^dashboard/$',views.dashboard, name = 'dashboard'),

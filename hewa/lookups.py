@@ -2,7 +2,7 @@ from selectable.base import ModelLookup
 from selectable.registry import registry
 from .models import Station, Analyser, AirQualityReading
 
-
+#class stationlookup searchs for Stations
 class StationLookup(ModelLookup):
 
 	model = Station

@@ -1,7 +1,12 @@
+/*
+function to render and display quelihewa stations map
+*/
+
 var kampala = new google.maps.LatLng(0.3136110,32.5811110);
 var marker;
 var map;
 
+//initialize map on webpage
 function initialize() {
   var mapOptions = {
     zoom: 12,
@@ -21,6 +26,7 @@ function initialize() {
 				'<h2>' + value.properties.title + '</h2>'+
 				'<p>' + "<a href='"+value.properties.url +"'>Readings</a>" + '</p>'+
 				'</div>'
+			//create an informatin window	
 			var infowindow = new google.maps.InfoWindow({
 				content: content
 			})
@@ -30,6 +36,7 @@ function initialize() {
 				map: map,
 				title: value.properties.title
 			});
+			//add click event listener
 			google.maps.event.addListener(marker, 'click', function(){
 				infowindow.open(map, marker);
 			});
@@ -38,4 +45,5 @@ function initialize() {
 
 }
 
+//add map to webpage
 google.maps.event.addDomListener(window, 'load', initialize);
